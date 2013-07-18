@@ -1,0 +1,15 @@
+﻿/* Changing scrollbar appearance for Webkit */
+/* http://productforums.google.com/forum/#!category-topic/chrome/give-feature-feedback-and-suggestions/mGJ19Khi0SE */
+::-webkit-scrollbar {
+    height: 12px;
+	width: 12px;
+	background: #d4d4d4;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0094ff;
+}
+
+::-webkit-scrollbar-corner {
+    background: #d4d4d4;
+}

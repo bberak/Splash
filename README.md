@@ -1,4 +1,4 @@
 Splash
 ======
 
-Easy, simple Torrent client.
+Easy, simple Torrent client. Built using Appy :)
