@@ -545,7 +545,7 @@ h6 {
   .navbar .nav > li > a {
     padding: 14px 15px 17px; }
     .navbar .nav > li > a:hover {
-      color: #F1C40F; }
+      color: #1abc9c; }
   .navbar .nav li {
     position: relative; }
     .navbar .nav li:hover > ul {
@@ -607,7 +607,7 @@ h6 {
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); }
 
 .navbar-inverse .navbar-inner {
-  background: #2980B9;
+  background: #34495e;
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); }
 .navbar-inverse .nav > li > a {
   color: white; }

@@ -10,11 +10,11 @@
                     </button>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li><a href="/search">Search</a></li>
-                            <li><a href="/downloads">Downloads</a></li>
-							<li><a href="/completed">Completed</a></li>
-                            <li><a href="/uploads">Uploads</a></li>
-                            <li><a href="/security">Security</a></li>
+							@DisplayItem("Search", "/search")
+							@DisplayItem("Downloads", "/downloads")
+							@DisplayItem("Completed", "/completed")
+							@DisplayItem("Uploads", "/uploads")
+							@DisplayItem("Security", "/security")
                         </ul>
                     </div>
                     <!--/.nav-collapse -->
@@ -23,3 +23,15 @@
         </div>
     </div>
 </div>
+
+@helper DisplayItem(string menuName, string url)
+{
+	var className = "placebo";
+	
+	if (Model == menuName)
+	{
+		className = "active";
+	}
+	
+	<li class="@className"><a href="@url">@menuName</a></li>
+}

@@ -2,8 +2,28 @@
     Layout = "master.html";
 }
 
-@Include("main_menu.html")
+@Include("main_menu.html", "Search")
 
-<div class="span9">
-	<h1>Search Page</h1>
+<div class="span12">
+	<div class="row">
+		<div class="span3">
+			<input type="text" id="search-box" placeholder="Your search goes here.." />
+		</div>
+		<div class="span3">
+			<a class="btn btn-primary btn-large btn-block" id="search-button" href="#">Search</a>
+		</div>
+	</div>
+	<hr />
+	<h2 class="search-results">Search for something above.</h2>
+	<ul class="search-results">
+	</ul>
 </div>
+
+@section scripts
+{  
+    <script type="text/javascript">
+        $(function () {
+            app.newSearch();
+        });
+    </script>
+}

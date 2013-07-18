@@ -22,8 +22,8 @@ namespace Splash
 		[Url("/initialize")]
         public Response Initialize(Request incoming)
         {
-			Thread.Sleep(1000);
-            return Json(new { success = true });
+			Thread.Sleep(2000);
+            return Json(new { Ready = true });
         }
 		
 		[Url("/search")]
@@ -31,11 +31,27 @@ namespace Splash
         {
             return View("search.html");
         }
+		
+		[Url("/search-for")]
+        public Response SearchForTerm(Request incoming)
+        {
+			Thread.Sleep(2000);
+			
+			var term = incoming.QueryString.Find("term");	
+			
+			var model = new SearchResults { SearchTerm = term };
+			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
+			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
+			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
+			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
+			
+            return Json(model);
+        }
 				
 		[Catches]
         public Response HandleException(Exception ex)
         {
-            return Basic(ex.ToString()).With(r => r.StatusCode = 500);
+            return Basic(ex).With(r => r.StatusCode = 500);
         }
     }
 }
