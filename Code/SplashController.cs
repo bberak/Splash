@@ -35,15 +35,10 @@ namespace Splash
 		[Url("/search-for")]
         public Response SearchForTerm(Request incoming)
         {
-			Thread.Sleep(2000);
-			
 			var term = incoming.QueryString.Find("term");	
 			
 			var model = new SearchResults { SearchTerm = term };
-			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
-			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
-			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
-			model.Items.Add(new SearchItem { Url = "http://somelink/x.torrent", Title = "Wale - Bad", Size = 123.5M });
+			model.Items = IsoHuntApi.Search(term);
 			
             return Json(model);
         }

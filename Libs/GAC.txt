@@ -5,3 +5,4 @@ System.Net.dll
 System.Windows.Forms.dll
 System.dll
 System.Drawing.dll
+Microsoft.CSharp.dll
