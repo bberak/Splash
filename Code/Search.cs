@@ -1,7 +1,6 @@
 using System;
 using System.Dynamic;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -50,6 +49,7 @@ namespace Splash
 		public static List<SearchItem> Search(string term, int page = 1, int rows = 20)
 		{
 			var url = string.Format("http://ca.isohunt.com/js/json.php?ihq={0}&start={1}&rows={2}", term, (page-1) * 20 + 1, rows);
+			Debug.WriteLine("IsoHunt Api call: {0}", url);
 			var json = Web.Get(url);
 			var adapter = new IsoHuntSearchAdapter(json);
 			
