@@ -12,6 +12,8 @@ namespace Splash
 {
     public class SplashController : Controller
     {
+		TorrentClient TorrentClient;
+		
 		[Url("/index")]
         public Response Index(Request incoming)
         {
@@ -21,8 +23,9 @@ namespace Splash
 		[Url("/initialize")]
         public Response Initialize(Request incoming)
         {
-			Thread.Sleep(2000);
-            return Json(new { Ready = true });
+			Thread.Sleep(2000); //-- Show the splash screen bit :)
+			TorrentClient = new TorrentClient();
+            return Json(new { Ready = true });			
         }
 		
 		[Url("/search")]
@@ -35,9 +38,11 @@ namespace Splash
         public Response SearchForTerm(Request incoming)
         {
 			var term = incoming.QueryString.Find("term");	
-			
+			var page = int.Parse(incoming.QueryString.Find("page"));
+			var size = int.Parse(incoming.QueryString.Find("size"));
+				
 			var model = new SearchResults { SearchTerm = term };
-			model.Items = IsoHuntApi.Search(term);
+			model.Items = IsoHuntApi.Search(term, page, size);
 			
             return Json(model);
         }
@@ -47,5 +52,10 @@ namespace Splash
         {
             return Basic(ex).With(r => r.StatusCode = 500);
         }
+		
+		protected override void CleanUpManagedResources()
+		{
+			TorrentClient.Dispose();
+		}
     }
 }
