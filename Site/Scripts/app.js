@@ -23,7 +23,7 @@ createApp = function () {
         },
 		
 		newSearch: function () {
-			function prepareDOM () {
+			function wireEvents () {
 				$("#search-button").click( function () {
 					var term = $("#search-box").val();
 					self.search(term);
@@ -33,19 +33,30 @@ createApp = function () {
 						$("#search-button").click();
 					}
 				});
-				$(".download-trigger").live( "click", function(e) {
-					if (!$(this).hasClass("downloading"))
+				$(".download-trigger").live("click", function(e) {
+					if (!$(this).hasClass("disabled"))
 					{
 						var url = $(this).attr("torrent-url");
 						$(this).removeClass("btn-primary");
 						$(this).addClass("disabled");
-						$(this).addClass("downloading");
 						$(this).text("Downloading..");
 					}
 					return false;
 				});
+				$("#load-more a").live("click", function (e) {
+					if (!$(this).hasClass("disabled")) {
+						var term = $(this).attr("term");
+						var page = $(this).attr("page");
+						var size = $(this).attr("size");
+						self.search(term, page, size);
+						$(this).removeClass("btn-info");
+						$(this).addClass("disabled");
+						$(this).text("Loading..");
+					}
+					return false;
+				});
 			}
-			prepareDOM();
+			wireEvents();
 			$("#search-box").focus();
 		},
 		
@@ -59,9 +70,6 @@ createApp = function () {
 				page = 1; 
 				size = 20; 
 				$(ul).find("li").remove();
-			}
-			else {
-				$("#load-more a").text("Loading..");
 			}		
 			$(h2).text("Searching for: " + term + "..");
 			$.get("/search-for?term={0}&page={1}&size={2}".f(encodeURIComponent(term), page, size), function (data) {						
@@ -69,11 +77,10 @@ createApp = function () {
 				$("#load-more").remove();
 				for (var i = 0; i < data.Items.length; i++) {
 					var item = data.Items[i];
-					$(ul).append("<li class='clearfix'><div class='left'>{0} - {1}MB</div><div class='right'><a torrent-url='{2}' class='download-trigger btn btn-primary btn-small' href='#'>Download</a></div></li>".f(item.Title, item.Size, item.Url));
+					$(ul).append("<li class='row'><div class='span10'>{0} - {1}MB</div><div class='span2'><a torrent-url='{2}' class='download-trigger btn btn-primary btn-small' href='#'>Download</a></div></li>".f(item.Title, item.Size, item.Url));
 				}
-				$(ul).append("<li id='load-more'><a class='btn btn-info btn-small' href='javascript:app.search(\"{0}\", {1}, {2});'>Load more</li>".f(escape(term), ++page, size));
+				$(ul).append("<li id='load-more'><a class='btn btn-info btn-small' term=\"{0}\" page=\"{1}\" size=\"{2}\" href='#'>Load more</li>".f(term, ++page, size));
 				if (isPaging) {
-					//$("#load-more")[0].scrollIntoView();
 					var offset = $("#load-more").offset();
 					offset.left -= 20;
 					offset.top -= 20;

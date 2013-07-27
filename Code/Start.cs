@@ -58,6 +58,7 @@ namespace Splash
             Control.CheckForIllegalCrossThreadCalls = false;
 
 			App app = new App("http://localhost:61408/index");
+			app.Text = "Splash";
             ThemeManager.ApplyTheme(GetModifiedTheme());
             Application.Run(app);
         }

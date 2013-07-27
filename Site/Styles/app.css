@@ -38,14 +38,6 @@
 	border-bottom: none;
 }
 
-.left {
-	float: left;
-}
-
-.right {
-	float: right;
-}
-
 .btn-small {
 	padding-top: 2px;
 	font-size: 80%;
