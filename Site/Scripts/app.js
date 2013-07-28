@@ -77,7 +77,7 @@ createApp = function () {
 				$("#load-more").remove();
 				for (var i = 0; i < data.Items.length; i++) {
 					var item = data.Items[i];
-					$(ul).append("<li class='row'><div class='span10'>{0} - {1}MB</div><div class='span2'><a torrent-url='{2}' class='download-trigger btn btn-primary btn-small' href='#'>Download</a></div></li>".f(item.Title, item.Size, item.Url));
+					$(ul).append("<li class='clearfix'><div class='left'>{0} - {1}MB</div><div class='right'><a torrent-url='{2}' class='download-trigger btn btn-primary btn-small' href='#'>Download</a></div></li>".f(item.Title, item.Size, item.Url));
 				}
 				$(ul).append("<li id='load-more'><a class='btn btn-info btn-small' term=\"{0}\" page=\"{1}\" size=\"{2}\" href='#'>Load more</li>".f(term, ++page, size));
 				if (isPaging) {
