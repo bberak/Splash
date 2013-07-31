@@ -13,75 +13,110 @@ using MonoTorrent.Dht.Listeners;
 using Appy.Core;
 
 namespace Splash
-{
-    public class TorrentClient : DisposableObject
-    {
-        BanList Banlist;
-        ClientEngine Engine;
-		BEncodedDictionary FastResumeDic;
-		Dictionary<string, TorrentManager> TorrentManagers;
-		TorrentSettings TorrentDefaults;
+{	
+	public class Config
+	{
+		public string BaseFolder { get; protected set; }
+		public string TorrentsFolder { get; protected set; }
+		public string DhtNodesFile { get; protected set; }
+		public string FastResumeFile { get; protected set; }
+		public string BanListFile { get; protected set; }
+		public string DownloadsFolder { get; protected set; }
+		public int Port { get; protected set; }
+		public int GlobalMaxUploadSpeed { get; protected set; }
 		
-		string BasePath;
-		string TorrentsPath;
-		string DhtNodesFile;
-		string FastResumeFile;
-		string BanListFile;
-		string DownloadsPath;
-		int Port;
-		int GlobalMaxUploadSpeed;
-
-        public TorrentClient()
-        {
-			Config();
-            SetupEngine();
-			SetupDHT();
-			SetupFastResume();
-            SetupBanlist();
-            LoadTorrentsFromFolder();
-        }
+		static object sync = new object();
+		static Config _Instance;
 		
-		void Config()
+		private Config(string baseFolder)
 		{
-			BasePath = Environment.CurrentDirectory;
-			TorrentsPath = Path.Combine(BasePath, "Torrents");
-			DhtNodesFile = Path.Combine(TorrentsPath, "DhtNodes.dht");
-			FastResumeFile = Path.Combine(TorrentsPath, "FastResume.frs");
-			BanListFile = Path.Combine(TorrentsPath, "BanList.ban");
-			DownloadsPath = Path.Combine(BasePath, "Downloads");
+			BaseFolder = baseFolder;
+			TorrentsFolder = Path.Combine(BaseFolder, "Torrents");
+			DhtNodesFile = Path.Combine(TorrentsFolder, "DhtNodes.dht");
+			FastResumeFile = Path.Combine(TorrentsFolder, "FastResume.frs");
+			BanListFile = Path.Combine(TorrentsFolder, "BanList.ban");
+			DownloadsFolder = Path.Combine(BaseFolder, "Downloads");
 			Port = 6969;
 			GlobalMaxUploadSpeed = 200 * 1024;
-			TorrentManagers = new Dictionary<string, TorrentManager>(20);
-			
-			// Create the default settings which a torrent will have.
-            // 4 Upload slots - a good ratio is one slot per 5kB of upload speed
-            // 50 open connections - should never really need to be changed
-            // Unlimited download speed - valid range from 0 -> int.MaxValue
-            // Unlimited upload speed - valid range from 0 -> int.MaxValue
-            TorrentDefaults = new TorrentSettings(4, 150, 0, 0);
-			
-			
-			if (!Directory.Exists(TorrentsPath)) Directory.CreateDirectory(TorrentsPath);
-			if (!Directory.Exists(DownloadsPath)) Directory.CreateDirectory(DownloadsPath);
 		}
-
-        void SetupEngine()
-        {
-            EngineSettings settings = new EngineSettings(DownloadsPath, Port);
+		
+		public static Config Instance
+		{
+			get
+			{
+				if (_Instance == null)
+				{
+					lock(sync)
+					{
+						if (_Instance == null)
+							_Instance = new Config(Environment.CurrentDirectory);
+					}
+				}
+				
+				return _Instance;
+			}
+		}
+	}
+	
+	public abstract class Provider : DisposableObject
+	{
+		protected Config Config = Config.Instance;
+	}
+	
+	public class TorrentClient : Provider
+	{
+		ClientEngine Engine;
+		DhtProvider DhtProvider;
+		FastResumeProvider FastResumeProvider;
+		SecurityProvider SecurityProvider;	
+		TorrentProvider TorrentProvider;
+		
+		public TorrentClient()
+		{
+			EngineSettings settings = new EngineSettings(Config.DownloadsFolder, Config.Port);
             settings.PreferEncryption = false;
 			settings.AllowedEncryption = EncryptionTypes.All;
-            // The maximum upload speed is 200 kilobytes per second, or 204,800 bytes per second
-            settings.GlobalMaxUploadSpeed = GlobalMaxUploadSpeed;
+            settings.GlobalMaxUploadSpeed = Config.GlobalMaxUploadSpeed;
 
             Engine = new ClientEngine(settings);
-            Engine.ChangeListenEndpoint(new IPEndPoint(IPAddress.Any, Port));
-        }
-
-		void SetupDHT()
-		{
-			byte[] nodes = File.Exists(DhtNodesFile) ? File.ReadAllBytes(DhtNodesFile) : null;
+            Engine.ChangeListenEndpoint(new IPEndPoint(IPAddress.Any, Config.Port));
 			
-			DhtListener dhtListner = new DhtListener (new IPEndPoint (IPAddress.Any, Port));
+			DhtProvider = new DhtProvider(Engine);
+			FastResumeProvider = new FastResumeProvider();
+			SecurityProvider = new SecurityProvider(Engine);
+			TorrentProvider = new TorrentProvider(Engine, FastResumeProvider);
+			
+			LoadAllTorrents();
+		}
+		
+		void LoadAllTorrents()
+		{
+			foreach (var file in Directory.GetFiles(Config.TorrentsFolder, "*.torrent"))
+			{
+				TorrentProvider.LoadTorrent(file, Guid.NewGuid().ToString());
+			}
+		}
+		
+		protected override void CleanUpManagedResources()
+		{
+			TorrentProvider.Dispose();
+			DhtProvider.Dispose();
+			FastResumeProvider.Dispose();
+			Engine.Dispose();
+		}
+	}
+		
+	public class DhtProvider : Provider
+	{
+		ClientEngine Engine;
+		
+		public DhtProvider(ClientEngine engine)
+		{
+			Engine = engine;
+			
+			byte[] nodes = File.Exists(Config.DhtNodesFile) ? File.ReadAllBytes(Config.DhtNodesFile) : null;
+			
+			DhtListener dhtListner = new DhtListener (new IPEndPoint (IPAddress.Any, Config.Port));
 			DhtEngine dhtEngine = new DhtEngine (dhtListner);
 			Engine.RegisterDht(dhtEngine);
             dhtListner.Start();
@@ -89,74 +124,111 @@ namespace Splash
 			Engine.DhtEngine.Start(nodes);
 		}
 		
-		void SetupFastResume()
+		protected override void CleanUpManagedResources()
 		{
-			FastResumeDic = File.Exists(FastResumeFile) ? 
-				BEncodedValue.Decode<BEncodedDictionary>(File.ReadAllBytes(FastResumeFile)) :
+			File.WriteAllBytes(Config.DhtNodesFile, Engine.DhtEngine.SaveNodes());
+		}
+	}
+	
+	public class FastResumeProvider : Provider
+	{
+		BEncodedDictionary FastResumeDic;
+		
+		public FastResumeProvider()
+		{
+			FastResumeDic = File.Exists(Config.FastResumeFile) ? 
+				BEncodedValue.Decode<BEncodedDictionary>(File.ReadAllBytes(Config.FastResumeFile)) :
 				new BEncodedDictionary();
 		}
-
-        void SetupBanlist()
-        {		
-            if (!File.Exists(BanListFile))
+		
+		public bool ContainsHash(string hash)
+		{
+			return FastResumeDic.ContainsKey(hash);
+		}
+		
+		public FastResume Get(string hash)
+		{
+			return new FastResume((BEncodedDictionary)FastResumeDic[hash]);
+		}
+		
+		public void Add(BEncodedString key, BEncodedValue value)
+		{
+			FastResumeDic.Add(key, value);
+		}
+		
+		protected override void CleanUpManagedResources()
+		{	
+			File.WriteAllBytes(Config.FastResumeFile, FastResumeDic.Encode());
+		}
+	}
+	
+	public class SecurityProvider : Provider
+	{
+		BanList BanList;
+		
+		public SecurityProvider(ClientEngine engine)
+		{
+			if (!File.Exists(Config.BanListFile))
                 return;
 				
-			Banlist = new BanList();
+			BanList = new BanList();
 
             // The banlist parser can parse a standard block list from peerguardian or similar services
             BanListParser parser = new BanListParser();
-            IEnumerable<AddressRange> ranges = parser.Parse(File.OpenRead(BanListFile));
-            Banlist.AddRange(ranges);
+            IEnumerable<AddressRange> ranges = parser.Parse(File.OpenRead(Config.BanListFile));
+            BanList.AddRange(ranges);
 
-            // Add a few IPAddress by hand
-            //Banlist.Add(IPAddress.Parse("12.21.12.21"));
-            //Banlist.Add(IPAddress.Parse("11.22.33.44"));
-            //Banlist.Add(IPAddress.Parse("44.55.66.77"));
-
-            Engine.ConnectionManager.BanPeer += delegate (object o, AttemptConnectionEventArgs e){
+            engine.ConnectionManager.BanPeer += delegate (object o, AttemptConnectionEventArgs e){
                 IPAddress address;
 
                 // The engine can raise this event simultaenously on multiple threads
                 if (IPAddress.TryParse(e.Peer.ConnectionUri.Host, out address)) {
-                    lock (Banlist) {
+                    lock (BanList) {
                         // If the value of e.BanPeer is true when the event completes,
                         // the connection will be closed. Otherwise it will be allowed
-                        e.BanPeer = Banlist.IsBanned(address);
+                        e.BanPeer = BanList.IsBanned(address);
                     }
                 }
             };
-        }
-
-        void LoadTorrentsFromFolder()
-        {
-			foreach (var file in Directory.GetFiles(TorrentsPath, "*.torrent"))
-			{
-				LoadTorrentFromFile(file);
-			}
-        }
+		}
+	}
+	
+	public class TorrentProvider : Provider
+	{
+		Dictionary<string, TorrentManager> TorrentManagers;
+		ClientEngine Engine;
+		FastResumeProvider FastResumeProvider;
+		TorrentSettings TorrentDefaults;
 		
-		public void LoadTorrentFromFile(string file, string key = "")
-		{
-			Debugging.WriteLine("Loading torrent: {0}", file);
+		public TorrentProvider(ClientEngine engine, FastResumeProvider fastResumeProvider)
+		{	
+			Engine = engine;
+			FastResumeProvider = fastResumeProvider;
+			TorrentManagers = new Dictionary<string, TorrentManager>();
 			
-			if (string.IsNullOrEmpty(key)) key = Guid.NewGuid().ToString();
-				
+			// Create the default settings which a torrent will have.
+            // 4 Upload slots - a good ratio is one slot per 5kB of upload speed
+            // 50 open connections - should never really need to be changed
+            // Unlimited download speed - valid range from 0 -> int.MaxValue
+            // Unlimited upload speed - valid range from 0 -> int.MaxValue
+            TorrentDefaults = new TorrentSettings(4, 150, 0, 0);
+		}
+		
+		public void LoadTorrent(string file, string key)
+		{
+			Debugging.WriteLine("Loading torrent: {0} with key {1}", file, key);
+			
 			var torrent = Torrent.Load(file);		
-			var torrentManager = new TorrentManager(torrent, DownloadsPath, TorrentDefaults);
+			var torrentManager = new TorrentManager(torrent, Config.DownloadsFolder, TorrentDefaults);
 			
 			string hash = torrent.InfoHash.ToHex();
-			if (FastResumeDic.ContainsKey(hash))
-				torrentManager.LoadFastResume(new FastResume((BEncodedDictionary)FastResumeDic[hash]));
+			if (FastResumeProvider.ContainsHash(hash))
+				torrentManager.LoadFastResume(FastResumeProvider.Get(hash));
             
 			Engine.Register(torrentManager);
 			TorrentManagers.Add(key, torrentManager);
 			
 			torrentManager.Start();
-		}
-		
-		public void LoadTorrentFromUrl(string url, string key = "")
-		{
-			//-- Save to Torrents Path
 		}
 		
 		protected override void CleanUpManagedResources()
@@ -170,13 +242,8 @@ namespace Splash
                     Thread.Sleep(250);
 				}
 					
-				FastResumeDic.Add(torrentManager.Torrent.InfoHash.ToHex (), torrentManager.SaveFastResume().Encode());
+				FastResumeProvider.Add(torrentManager.Torrent.InfoHash.ToHex(), torrentManager.SaveFastResume().Encode());
 			}
-			
-			File.WriteAllBytes(DhtNodesFile, Engine.DhtEngine.SaveNodes());
-			File.WriteAllBytes(FastResumeFile, FastResumeDic.Encode());
-			
-			Engine.Dispose();
 		}
-    }
+	}
 }
