@@ -46,6 +46,21 @@ namespace Splash
 			
             return Json(model);
         }
+		
+		[Url("/start-torrent")]
+        public Response StartTorrent(Request incoming)
+        {
+			var url = incoming.QueryString.Find("url");	
+			TorrentClient.StartTorrent(url);
+			
+            return Json(new { Success = true });	
+        }
+		
+		[Url("/downloads")]
+		public Response Downloads(Request incoming)
+		{
+			return Basic("Downloads...");
+		}
 				
 		[Catches]
         public Response HandleException(Exception ex)

@@ -89,6 +89,17 @@ namespace Splash
 			LoadAllTorrents();
 		}
 		
+		public void StartTorrent(string url)
+		{
+			byte[] data = Web.GetBytes(url);
+			string guid = Guid.NewGuid().ToString();
+			string file = Path.Combine(Config.TorrentsFolder, guid + ".torrent");
+			
+			File.WriteAllBytes(file, data);
+			
+			TorrentProvider.LoadTorrent(file, guid);
+		}
+		
 		void LoadAllTorrents()
 		{
 			foreach (var file in Directory.GetFiles(Config.TorrentsFolder, "*.torrent"))
