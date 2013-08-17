@@ -25,6 +25,7 @@ namespace Splash
         {
 			Thread.Sleep(2000); //-- Show the splash screen bit :)
 			TorrentClient = new TorrentClient();
+			
             return Json(new { Ready = true });			
         }
 		
@@ -38,7 +39,7 @@ namespace Splash
         public Response SearchForTerm(Request incoming)
         {
 			var term = incoming.QueryString.Find("term");	
-			var page = int.Parse(incoming.QueryString.Find("page"));
+			var page = int.Parse(incoming.QueryString.Find("page")); //-- Consider as .As<T>() extension or .Parse<T>()
 			var size = int.Parse(incoming.QueryString.Find("size"));
 				
 			var model = new SearchResults { SearchTerm = term };
@@ -59,7 +60,7 @@ namespace Splash
 		[Url("/downloads")]
 		public Response Downloads(Request incoming)
 		{
-			return Basic("Downloads...");
+			return View("downloads.html", new List<DownloadItem>());
 		}
 				
 		[Catches]

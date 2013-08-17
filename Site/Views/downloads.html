@@ -1,0 +1,28 @@
+@{
+    Layout = "master.html";
+}
+
+@Include("main_menu.html", "Downloads")
+
+	
+<div class="row">
+	<div class="span12">
+		<hr />
+		<h2 class="search-results">Current downloads</h2>
+		<ul class="search-results">
+		@foreach (var item in Model)
+		{
+			<li>@item.Id</li>
+		}
+		</ul>
+	</div>
+</div>
+
+@section scripts
+{  
+    <script type="text/javascript">
+        $(function () {
+            //app.startProgressPolling();
+        });
+    </script>
+}

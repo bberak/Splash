@@ -27,4 +27,17 @@ namespace Splash
 			Items = new List<SearchItem>();
 		}
 	}
+	
+	public class DownloadProgress
+	{
+		public string TorrentId { get; set; }
+		public string TorrentState { get; set; }
+		public decimal PercentDownloaded { get; set; }
+	}
+	
+	public class DownloadItem : DownloadProgress
+	{
+		public string TorrentName { get; set; }	
+		public decimal Size { get; set; }
+	}
 }
