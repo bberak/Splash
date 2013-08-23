@@ -12,7 +12,7 @@
 		<ul class="search-results">
 		@foreach (var item in Model)
 		{
-			<li>@item.Id</li>
+			<li torrent-id="@item.Id">@item.Title</li>
 		}
 		</ul>
 	</div>
