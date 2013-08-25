@@ -39,6 +39,17 @@ namespace Splash
 			Port = 6969;
 			GlobalMaxUploadSpeed = 200 * 1024;
 		}
+
+		public Config EnsureFoldersExist()
+		{
+			if (!Directory.Exists(TorrentsFolder))
+				Directory.CreateDirectory(TorrentsFolder);
+
+			if (!Directory.Exists(DownloadsFolder))
+				Directory.CreateDirectory(DownloadsFolder);
+
+			return this;
+		}
 		
 		public static Config Instance
 		{
@@ -60,7 +71,7 @@ namespace Splash
 	
 	public abstract class Provider : DisposableObject
 	{
-		protected Config Config = Config.Instance;
+		protected Config Config = Config.Instance.EnsureFoldersExist();
 	}
 	
 	public class TorrentClient : Provider
@@ -106,6 +117,29 @@ namespace Splash
 			{
 				TorrentProvider.LoadTorrent(file, Guid.NewGuid().ToString());
 			}
+		}
+
+		public List<DownloadItem> GetCurrentDownloads()
+		{
+			var list = new List<DownloadItem>();
+			var dic = TorrentProvider.GetTorrentManagers();
+
+			foreach (var key in dic.Keys)
+			{
+				var manager = dic[key];
+
+				var item = new DownloadItem
+				{
+					TorrentId = key,
+					TorrentName = manager.Torrent != null ? manager.Torrent.Name : "Loading..",
+					TorrentState = manager.State.ToString(),
+					PercentDownloaded = (int)manager.Progress
+				};
+
+				list.Add(item);
+			}
+
+			return list;
 		}
 		
 		protected override void CleanUpManagedResources()
@@ -240,6 +274,11 @@ namespace Splash
 			TorrentManagers.Add(key, torrentManager);
 			
 			torrentManager.Start();
+		}
+
+		public Dictionary<string, TorrentManager> GetTorrentManagers()
+		{
+			return TorrentManagers;
 		}
 		
 		protected override void CleanUpManagedResources()

@@ -4,15 +4,13 @@
 
 @Include("main_menu.html", "Downloads")
 
-	
 <div class="row">
 	<div class="span12">
-		<hr />
-		<h2 class="search-results">Current downloads</h2>
-		<ul class="search-results">
+		<h2 class="downloads-list">Current Downloads</h2>
+		<ul class="downloads-list">
 		@foreach (var item in Model)
 		{
-			<li torrent-id="@item.Id">@item.Title <span>Progress: @item.Percent%</span></li>
+			<li torrent-id="@item.TorrentId">@item.TorrentName <span class="progress">Progress: @item.PercentDownloaded</span>% <span class="state">@item.TorrentState</span></li>
 		}
 		</ul>
 	</div>
@@ -22,7 +20,7 @@
 {  
     <script type="text/javascript">
         $(function () {
-            //app.startProgressPolling();
+            app.startProgressPolling();
         });
     </script>
 }

@@ -28,16 +28,11 @@ namespace Splash
 		}
 	}
 	
-	public class DownloadProgress
+	public class DownloadItem
 	{
 		public string TorrentId { get; set; }
+		public string TorrentName { get; set; }
 		public string TorrentState { get; set; }
-		public decimal PercentDownloaded { get; set; }
-	}
-	
-	public class DownloadItem : DownloadProgress
-	{
-		public string TorrentName { get; set; }	
-		public decimal Size { get; set; }
+		public int PercentDownloaded { get; set; }
 	}
 }

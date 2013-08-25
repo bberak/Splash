@@ -24,7 +24,8 @@ namespace Splash
         public Response Initialize(Request incoming)
         {
 			Thread.Sleep(2000); //-- Show the splash screen bit :)
-			TorrentClient = new TorrentClient();
+		
+			if (TorrentClient == null) TorrentClient = new TorrentClient();
 			
             return Json(new { Ready = true });			
         }
@@ -57,15 +58,23 @@ namespace Splash
             return Json(new { Success = true });	
         }
 		
-		[Url("/downloads")]
+		[Url("/downloads-list")]
 		public Response Downloads(Request incoming)
 		{
-			return View("downloads.html", new List<DownloadItem>());
+			return View("downloads.html", TorrentClient.GetCurrentDownloads());
 		}
-				
+		
+		[Url("/downloads-progress")]
+		public Response CheckDownloadProgress(Request incoming)
+		{
+			return Json(TorrentClient.GetCurrentDownloads());
+		}
+
 		[Catches]
         public Response HandleException(Exception ex)
         {
+        	Debugging.WriteLine(ex.ToString());
+
             return Basic(ex).With(r => r.StatusCode = 500);
         }
 		
