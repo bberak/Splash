@@ -106,8 +106,8 @@ createApp = function () {
 					for (var i = 0; i < data.length; i++) {
 						var item = data[i];
 						var li = $(".downloads-list li[torrent-id='{0}']".f(item.TorrentId));
-						$(li).find(".progress").Text(item.PercentDownloaded);
 						$(li).find(".state").Text(item.TorrentState);
+						$(li).find(".progress .bar").css("width", item.PercentDownloaded + "%");
 					}
 	            });
 				tid = setTimeout(updateDownloadItems, 3000)
