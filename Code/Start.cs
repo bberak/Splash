@@ -1,13 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Drawing;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using BB.Common.WinForms;
+using System.Drawing;
 using Appy.Core;
+using Appy.Core.Themes;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -17,7 +18,7 @@ using Appy.Core;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Splash")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -27,7 +28,7 @@ using Appy.Core;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e81fcb60-c431-4241-b8de-652927c05fee")]
+[assembly: Guid("4a974516-3ceb-4097-8850-0ec40cb31024")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -57,19 +58,42 @@ namespace Splash
             //Application.SetCompatibleTextRenderingDefault(false);
             Control.CheckForIllegalCrossThreadCalls = false;
 
-			App app = new App("http://localhost:61408/index");
+			App app = new App("http://localhost:9393/");
 			app.Text = "Splash";
-            ThemeManager.ApplyTheme(GetModifiedTheme());
+            ThemeManager.ApplyTheme(GetMyTheme());
             Application.Run(app);
         }
 
-		static BaseTheme GetModifiedTheme()
+		static BaseTheme GetMyTheme()
         {
-            var modifiedTheme = new AppyTheme();
-            //-- Uncomment line below to see the effects!
-            //modifiedTheme.Colors["ButtonMouseOverForeground"] = Color.Red;
+            var myTheme = new AppyTheme();
 
-            return modifiedTheme;
+            //-- Uncomment lines below to see the effects!
+            //myTheme.Units["PanelBorderWidth"] = 0;
+            //myTheme.Colors["PanelBorder"] = Color.DarkGray;
+            //myTheme.Colors["FormBorder"] = Color.DarkGray;
+            //myTheme.Colors["FormBackground"] = Color.Pink;
+            //myTheme.Colors["ButtonMouseOverForeground"] = Color.White;
+            //myTheme.Colors["ButtonMouseOverBorder"] = Color.DeepPink;
+            //myTheme.Colors["ButtonMouseOverBackground"] = Color.DeepPink;
+            //myTheme.Colors["ButtonMouseDownBackground"] = Color.DeepPink;
+            //myTheme.Colors["ButtonForeground"] = Color.DarkGray;
+            //myTheme.Units["ButtonBorderSize"] = 2;
+            //myTheme.Colors["ButtonBorder"] = Color.White;
+            //myTheme.Colors["ButtonBackground"] = Color.White;
+            //myTheme.Colors["ResizeButtonMouseOverForeground"] = Color.DeepPink;
+            //myTheme.Colors["ResizeButtonMouseOverBorder"] = Color.DeepPink;
+            //myTheme.Colors["ResizeButtonMouseOverBackground"] = Color.DeepPink;
+            //myTheme.Colors["ResizeButtonMouseDownBackground"] = Color.DeepPink;
+            //myTheme.Colors["ResizeButtonForeground"] = Color.DarkGray;
+            //myTheme.Units["ResizeButtonBorderSize"] = 2;
+            //myTheme.Colors["ResizeButtonBorder"] = Color.Lavender;
+            //myTheme.Colors["ResizeButtonBackground"] = Color.Lavender;
+            //myTheme.Colors["ToolTipBackground"] = Color.White;
+            //myTheme.Colors["ToolTipForeground"] = Color.Black;
+            //myTheme.Units["FormBorderWidth"] = 2;
+
+            return myTheme;
         }
     }
 }

@@ -1,0 +1,27 @@
+commit e5db3a4cbb8dbe0f535d4bcd01eb446d16362188
+Author:     Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
+AuthorDate: 2014-03-30
+Commit:     Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
+CommitDate: 2014-03-30
+
+    Update NEWS
+
+commit 305ef84e5de5acd0281ae9636ad1239886e60b8f
+Author:     Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
+AuthorDate: 2014-03-30
+Commit:     Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
+CommitDate: 2014-03-30
+
+    Bump up version number to 1.18.5
+
+commit f0473dc34dfb4d36b92aee49a6373704582338b5
+Author:     Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
+AuthorDate: 2014-03-30
+Commit:     Tatsuhiro Tsujikawa <tatsuhiro.t@gmail.com>
+CommitDate: 2014-03-30
+
+    Ignore error when setting DSCP value
+    
+    Setting DSCP is additional feature and failure to enable it should not
+    abort download entirely.  This change fixes the bug that windows build
+    does not perform bittorrent downloads.

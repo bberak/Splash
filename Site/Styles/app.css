@@ -1,60 +1,21 @@
-﻿/* Changing scrollbar appearance for Webkit */
-/* http://productforums.google.com/forum/#!category-topic/chrome/give-feature-feedback-and-suggestions/mGJ19Khi0SE */
-::-webkit-scrollbar {
-    height: 12px;
-	width: 12px;
-	background: #d4d4d4;
+.example-enter {
+  opacity: 0.01;
+  -webkit-transition: opacity .5s ease-in;
 }
 
-::-webkit-scrollbar-thumb {
-    background: #0094ff;
+.example-enter.example-enter-active {
+  opacity: 1;
 }
 
-::-webkit-scrollbar-corner {
-    background: #d4d4d4;
+.example-leave {
+  opacity: 1;
+  -webkit-transition: opacity .5s ease-in;
 }
 
-.btn, 
-.btn-block, 
-.btn-large, 
-.btn-primary, 
-.btn.btn-large {
-	max-height: 41px;
-	padding-top: 8px;
+.example-leave.example-leave-active {
+  opacity: 0.01;
 }
 
-.search-results, 
-.downloads-list {
-	padding-left: 0px;
-	margin-left: 0px;
+body {
+	background-color: green;
 }
-
-.search-results li, 
-.downloads-list li {
-	list-style: none;
-	padding: 8px 0px 8px 0px;
-	border-bottom: 2px dashed #d4d4d4;
-}
-
-.search-results li:last-child, 
-.downloads-list li:last-child {
-	border-bottom: none;
-}
-
-.btn-small {
-	padding-top: 2px;
-	font-size: 80%;
-}
-
-.offset0 {
-  margin-left: 0px;
-}
-
-.left {
-	float: left;
-}
-
-.right {
-	float: right;
-}
-
