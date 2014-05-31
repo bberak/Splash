@@ -98,7 +98,7 @@ var WelcomeScreen = React.createClass({
     render: function() {
         return (
             <div>
-                <h1>Welcome with love!! And live reload :)</h1>
+                <h1>Welcome with love!!! And live reload :)</h1>
                 <h2>Splash uses Torrents to download files and content. Torrents may not be legal in your country, region, state, province or jurisdiction.</h2>
                 <input type="text" placeholder="Your downloads folder.." />
                 <input type="submit" value="Understood" />
