@@ -30,6 +30,16 @@ var AboutPage = React.createClass({
     }
 });
 
+var SettingsPage = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <h2>Settings Page</h2>
+            </div>
+        );
+    }
+});
+
 var NotFoundPage = React.createClass({
     render: function() {
         return (
@@ -44,13 +54,15 @@ var PageContainer = React.createClass({
     render: function() {
         switch (this.props.activeMenu.name) {
             case "Search":
-                return (<SearchPage />);
+                return <SearchPage />;
             case "Library":
-                return (<LibraryPage />);
+                return <LibraryPage />;
             case "About":
-                return (<AboutPage />);
+                return <AboutPage />;
+            case "Settings":
+                return <SettingsPage />;
             default:
-                return (<NotFoundPage />);
+                return <NotFoundPage />;
         }
     }
 });
@@ -78,25 +90,46 @@ var MainMenu = React.createClass({
         this.props.menus.forEach(function(menu) {
             rows.push(<MenuItem name={menu.name} active={menu.name === this.props.activeMenu.name} onSelect={this.handleSelect} />);
         }.bind(this));
-        return (<ul>{rows}</ul>);
+        return <ul>{rows}</ul>;
+    }
+});
+
+var WelcomeScreen = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <h1>Welcome</h1>
+                <h2>Splash uses Torrents to download files and content. Torrents may not be legal in your country, region, state, province or jurisdiction.</h2>
+                <input type="text" placeholder="Your downloads folder.." />
+                <input type="submit" value="Understood" />
+            </div>
+        );
     }
 });
 
 var App = React.createClass({
     handleMenuChange: function(menu) {
-        this.setState({ activeMenu: menu });
+        var currentState = this.state;
+        currentState.activeMenu = menu;
+        this.setState(currentState);
     },
     getInitialState: function() {
         return {
-            activeMenu: { name: 'Search' }
+            activeMenu: { name: 'Search' },
+            setupComplete: false
         };
     },
     render: function() {
-        return (
-            <div>
-                <MainMenu menus={this.props.menus} activeMenu={this.state.activeMenu} onMenuChange={this.handleMenuChange} />
-                <PageContainer activeMenu={this.state.activeMenu} />
-            </div>
-        );
+        if (this.state.setupComplete) {
+            return (
+                <div>
+                    <MainMenu menus={this.props.menus} activeMenu={this.state.activeMenu} onMenuChange={this.handleMenuChange} />
+                    <PageContainer activeMenu={this.state.activeMenu} />
+                </div>
+            );
+        } 
+        else {
+            return <WelcomeScreen />;
+        }
     }
 });

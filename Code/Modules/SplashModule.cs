@@ -16,7 +16,7 @@ namespace Splash.Modules
 {
     public class SplashModule : NancyModule
     {
-        public SplashModule(ISettingsService settingsService)
+        public SplashModule()
         {
             Get["/"] = parameters =>
             {   

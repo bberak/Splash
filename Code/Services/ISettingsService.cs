@@ -5,6 +5,8 @@ namespace Splash.Services
 {
 	public interface ISettingsService
 	{
-		Settings GetSettings();
+		Settings Get();
+
+		void Save(Settings userSettings); 
 	}
 }
