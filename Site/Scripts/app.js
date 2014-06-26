@@ -1,11 +1,19 @@
-/** @jsx React.DOM */
+define([
+  	'jsx!Components/canvas',
+  	'rsvp',
+  	'flux'
+], function(Canvas, RSVP, Flux){
 
-var MENUS = [
-	{ name: 'Search' 	},
- 	{ name: 'Library' 	},
- 	{ name: 'About' 	},
- 	{ name: 'Popular' 	},
- 	{ name: 'Settings' 	}
-];
- 
-React.renderComponent(<App menus={MENUS} />, document.body);
+	var init = function () {
+		Canvas.render();
+		Flux.actions.appStart();
+	};
+
+	return {
+		init: init
+	};
+});
+
+
+
+
