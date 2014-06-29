@@ -3,7 +3,6 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var less = require('gulp-less');
 var sass = require('gulp-sass');
-var react = require('gulp-react');
 var uglify = require('gulp-uglify');
 var clean = require('gulp-clean');
 var browserify = require('gulp-browserify');
@@ -23,8 +22,16 @@ gulp.task('clean', function() {
 gulp.task('scripts', function() {
     gulp.src('src/scripts/app.js')
         .pipe(browserify({
-          insertGlobals : true
+          insertGlobals : false,
+          debug: true,
+          transform: ['reactify'],
+          paths: ['./node_modules','./src/scripts']
         }))
+        .on('prebundle', function(bundler) {
+          // Make React available externally for dev tools
+          bundler.require('react');
+        })
+        .on('error', gutil.log)
         .pipe(gulp.dest('build/scripts'))
         .pipe(uglify())
     	.pipe(rename({suffix: '.min'}))

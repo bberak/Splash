@@ -6,15 +6,11 @@
     "url": "https://github.com/bberak/Splash"
   },
   "author": "Boris Berak",
-  "browserify": {
-    "transform": [ 
-      ["reactify", {"es6": true}] 
-    ]
-  },
   "dependencies": {
     "react": "~0.9.0",
     "reactify": "~0.13.1",
     "react-tools": "~0.9.0",
+    "fluxxor": "~1.2.2",
     "async": "~0.2.10",
     "superagent": "~0.17.0",
     "http-proxy": "~1.0.2",
@@ -44,6 +40,7 @@
     "gulp-nodemon": "~1.0.2",
     "gulp-livereload": "~2.1.0",
     "gulp-mocha": "~0.4.1",
+    "gulp-plumber": "~0.6.3",
     "jsdom": "~0.10.3"
   }
 }
