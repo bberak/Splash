@@ -35,7 +35,7 @@ gulp.task('scripts', function() {
 
 gulp.task('styles', function() {
   return gulp.src('src/**/*.scss')
-    .pipe(sass())
+    .pipe(sass({errLogToConsole: true}))
     .pipe(gulp.dest('build/'))
     .pipe(minifycss())
     .pipe(rename({suffix: '.min'}))
