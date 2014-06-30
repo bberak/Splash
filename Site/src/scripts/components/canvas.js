@@ -4,6 +4,7 @@ var React = require('react');
 var Fluxxor = require('fluxxor');
 var WelcomeView = require('./welcome/welcomeView.js')
 var Container = require('./container.js');
+var Loader = require('./loader.js');
 
 var FluxMixin = Fluxxor.FluxMixin(React),
     StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -13,23 +14,28 @@ var Canvas = React.createClass({
 	mixins: [FluxMixin, StoreWatchMixin("StartupStore")],
 
 	getStateFromFlux: function() {
-	    var flux = this.getFlux();
 	    return {
-	    	startup: flux.store("StartupStore").getState()
+	    	startup: this.getFlux().store("StartupStore").getState()
 	    };
   	},
 
 	render: function() {
+
+		var component = null;
+
 		if (!this.state.startup.ready) {
-			return <div><h1>Loading...</h1></div>;
+			component = <Loader />;
 		}
 		else
 		{
 			if (this.state.startup.firstStartup)
-				return <div><WelcomeView /></div>;
+				component = <WelcomeView />;
 			else
-				return <div><Container /></div>;
+				component = <Container />;
 		}
+	
+
+		return <div>{component}</div>;
 	}
 
 });

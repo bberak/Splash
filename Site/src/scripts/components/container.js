@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
+var Menu = require('./menu/menu.js');
 
 var FluxChildMixin = Fluxxor.FluxChildMixin(React);
 
@@ -12,7 +13,7 @@ var Container = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<h2>Container goes here..</h2>
+				<Menu />
 			</div>
 		);
 	}
