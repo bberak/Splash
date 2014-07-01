@@ -1,5 +1,6 @@
 var StartupStore = require('./stores/startupStore.js');
 var MenuStore = require('./stores/menuStore.js');
+var SearchStore = require('./stores/searchStore.js');
 var Constants = require('./constants.js');
 var Fluxxor = require('fluxxor');
 
@@ -12,14 +13,18 @@ var actions = {
     },
     menuSelected: function(menuName) {
     	this.dispatch(Constants.actions.MENU_SELECTED, { name: menuName});
+    },
+    searchTermEntered: function(searchTerm){
+    	this.dispatch(Constants.actions.SEARCH_TERM_ENTERED, { term: searchTerm });
     }
 };
 
 var stores = {
     StartupStore: new StartupStore(),
-    MenuStore: new MenuStore()
+    MenuStore: new MenuStore(),
+    SearchStore: new SearchStore()
 };
 
-var flux = new Fluxxor.Flux(stores, actions);
+var Flux = new Fluxxor.Flux(stores, actions);
 
-module.exports = flux;
+module.exports = Flux;
