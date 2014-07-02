@@ -9,7 +9,7 @@ var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 var SearchItem = React.createClass({
 
 	render: function() {
-		return <li>{this.props.name}</li>;
+		return <li>{this.props.name} Status: {this.props.status}</li>;
 	}
 
 });

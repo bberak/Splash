@@ -7,8 +7,8 @@ var MenuStore = Fluxxor.createStore({
     initialize: function() {
         this._all = Config.menus;
         this._active = Config.menus[0];
-        this.bindActions(Constants.actions.MENU_SELECTED, this._onDownloadFolderSelected);
-        this.bindActions(Constants.actions.MENU_SELECTED, this._onMenuSelected)
+        this.bindActions(Constants.Actions.MENU_SELECTED, this._onDownloadFolderSelected);
+        this.bindActions(Constants.Actions.MENU_SELECTED, this._onMenuSelected)
     },
 
     _onMenuSelected: function(payload) {

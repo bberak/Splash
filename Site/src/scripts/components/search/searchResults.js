@@ -22,16 +22,19 @@ var SearchResults = React.createClass({
 
 	render: function() {
 
-		if (this.state.search.searching){
+		if (this.state.search.searching) {
 			var phrase = "Searching for: " + this.state.search.term;
 			return <div><Loader phrase={phrase} /></div>
 		}
 		else {
 			var results = _.map(this.state.search.results, function(s){
-				return <SearchItem name={s} />;
-			})
+				return <SearchItem key={s.torrentId} name={s.name} status={s.status} />;
+			});
 
-			return <ul>{results}</ul>;
+			return (
+				<div>
+					<ul>{results}</ul>
+				</div>);
 		}
 	}
 

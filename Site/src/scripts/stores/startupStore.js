@@ -6,8 +6,8 @@ var StartupStore = Fluxxor.createStore({
     initialize: function() {
         this._ready = false;
         this._firstStartup = false;
-        this.bindActions(Constants.actions.APP_START, this._onAppStart);
-        this.bindActions(Constants.actions.DOWNLOAD_FOLDER_SELECTED, this._onDownloadFolderSelected);
+        this.bindActions(Constants.Actions.APP_START, this._onAppStart);
+        this.bindActions(Constants.Actions.DOWNLOAD_FOLDER_SELECTED, this._onDownloadFolderSelected);
     },
 
     _onAppStart: function() {

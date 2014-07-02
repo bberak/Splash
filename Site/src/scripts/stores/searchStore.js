@@ -8,7 +8,7 @@ var SearchStore = Fluxxor.createStore({
         this._term = null;
         this._results = [];
         this._searching = false;
-        this.bindActions(Constants.actions.SEARCH_TERM_ENTERED, this._onSearchTermEntered);
+        this.bindActions(Constants.Actions.SEARCH_TERM_ENTERED, this._onSearchTermEntered);
     },
 
     _onSearchTermEntered: function(payload) {
@@ -16,7 +16,12 @@ var SearchStore = Fluxxor.createStore({
         this._searching = true;
 
         setTimeout(function() {
-            this._results = ["Ini", "Mini", "Myni", "Mo"];
+            this._results = [
+                { name: "Ini", torrentId: "1", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 },
+                { name: "Mini", torrentId: "2", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 },
+                { name: "Myni", torrentId: "3", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 },
+                { name: "Mo", torrentId: "4", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 }
+            ];
             this._searching = false;
             this.emit("change");
         }.bind(this), 2000);
