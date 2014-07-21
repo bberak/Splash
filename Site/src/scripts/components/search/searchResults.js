@@ -28,7 +28,7 @@ var SearchResults = React.createClass({
 		}
 		else {
 			var results = _.map(this.state.search.results, function(s){
-				return <SearchItem key={s.torrentId} name={s.name} status={s.status} />;
+				return <SearchItem key={s.url} name={s.name} status={s.status} size={s.size} seeds={s.seeds} />;
 			});
 
 			return (

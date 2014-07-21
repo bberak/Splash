@@ -17,10 +17,10 @@ var SearchStore = Fluxxor.createStore({
 
         setTimeout(function() {
             this._results = [
-                { name: "Ini", torrentId: "1", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 },
-                { name: "Mini", torrentId: "2", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 },
-                { name: "Myni", torrentId: "3", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 },
-                { name: "Mo", torrentId: "4", status: Constants.TorrentStatuses.NONE, size: 100, bandwidth: 0.75 }
+                { name: "Ini", status: Constants.TorrentStatuses.NONE, size: 100, seeds: 75, url: "1" },
+                { name: "Mini", status: Constants.TorrentStatuses.DOWNLOADING, size: 100, seeds: 75, url: "2" },
+                { name: "Myni", status: Constants.TorrentStatuses.ERROR, size: 100, seeds: 75, url: "3" },
+                { name: "Mo", status: Constants.TorrentStatuses.DOWLOADED, size: 100, seeds: 75, url: "4" }
             ];
             this._searching = false;
             this.emit("change");
