@@ -4,6 +4,7 @@ var React = require('react');
 var Fluxxor = require('fluxxor');
 var Menu = require('./menu/menu.js');
 var SearchView = require('./search/searchView.js');
+var DownloadsView = require('./downloads/downloadsView.js');
 
 var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 	StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -26,6 +27,10 @@ var Container = React.createClass({
 				view = <SearchView />;
 				break;
 
+			case "Downloads":
+				view = <DownloadsView />;
+				break;
+				
 			default:
 				view = <h2>Could not find view for {this.state.menus.active}</h2>;
 				break;
