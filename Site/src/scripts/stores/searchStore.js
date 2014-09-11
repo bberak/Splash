@@ -7,8 +7,9 @@ var SearchStore = Fluxxor.createStore({
 
     initialize: function() {
         this._term = null;
+        this._page = null;
         this._results = [];
-        this._searching = false;
+        this._status = Constants.SearchStatuses.NONE;
         this.bindActions(
             Constants.Actions.SEARCH_TERM_ENTERED, this._onSearchTermEntered,
             Constants.Actions.START_DOWNLOAD, this._onStartDownload
@@ -17,7 +18,8 @@ var SearchStore = Fluxxor.createStore({
 
     _onSearchTermEntered: function(payload) {
         this._term = payload.term;
-        this._searching = true;
+        this._page = 1;
+        this._status = Constants.SearchStatuses.SEARCHING;
 
         setTimeout(function() {
             this._results = [
@@ -26,7 +28,7 @@ var SearchStore = Fluxxor.createStore({
                 { name: "Myni", downloading: false, size: 100, seeds: 75, url: "3" },
                 { name: "Mo",   downloading: false, size: 100, seeds: 75, url: "4" }
             ];
-            this._searching = false;
+            this._status = Constants.SearchStatuses.NONE;
             this.emit("change");
         }.bind(this), 2000);
 
@@ -46,7 +48,7 @@ var SearchStore = Fluxxor.createStore({
     getState: function() {
         return {
             term: this._term,
-            searching: this._searching,
+            status: this._status,
             results: this._results
         };
     }

@@ -12,6 +12,11 @@ var Constants = {
 		DOWNLOADING: "DOWNLOADING",
 		DOWNLOADED: "DOWNLOADED",
 		ERROR: "ERROR"
+	},
+	SearchStatuses: {
+		NONE: "NONE",
+		SEARCHING: "SEARCHING",
+		PAGING: "PAGING"
 	}
 };
 

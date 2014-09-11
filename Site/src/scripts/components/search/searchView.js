@@ -5,19 +5,11 @@ var Fluxxor = require('fluxxor');
 var SearchBox = require('./searchBox.js');
 var SearchResults = require('./searchResults.js');
 
-var FluxChildMixin = Fluxxor.FluxChildMixin(React),
-	StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var FluxChildMixin = Fluxxor.FluxChildMixin(React);
 
 var SearchView = React.createClass({
 
-	mixins: [FluxChildMixin, StoreWatchMixin("SearchStore")],
-
-	getStateFromFlux: function() {
-	    var flux = this.getFlux();
-	    return {
-	    	search: flux.store("SearchStore").getState()
-	    };
-  	},
+	mixins: [FluxChildMixin],
 
 	render: function() {
 		return (
