@@ -12,29 +12,74 @@ var SearchStore = Fluxxor.createStore({
         this._status = Constants.SearchStatuses.NONE;
         this.bindActions(
             Constants.Actions.SEARCH_TERM_ENTERED, this._onSearchTermEntered,
-            Constants.Actions.START_DOWNLOAD, this._onStartDownload
+            Constants.Actions.START_DOWNLOAD, this._onStartDownload,
+            Constants.Actions.LOAD_NEXT_SEARCH_RESULTS, this._onLoadNextSearchResults
         );
     },
 
+    _isValidSearchTerm: function(currentSearchTerm, newSearchTerm){
+
+        if (!newSearchTerm)
+            return false;
+
+        if (newSearchTerm.length < 1)
+            return false;
+
+        if (currentSearchTerm === newSearchTerm)
+            return false;
+
+        if (currentSearchTerm && currentSearchTerm.valueOf() === newSearchTerm.valueOf())
+            return false;
+
+        return true;
+    },
+
     _onSearchTermEntered: function(payload) {
+
+        if (this._isValidSearchTerm(this._term, payload.term) == false)
+            return;
+
+        this._results.length = 0;
         this._term = payload.term;
         this._page = 1;
-
-        if (this._term && this._term.length > 0) {
-            this._status = Constants.SearchStatuses.SEARCHING;
-            setTimeout(function() {
-                this._results = [
-                    { name: "Ini",  downloading: false, size: 100, seeds: 75, url: "1" },
-                    { name: "Mini", downloading: false, size: 100, seeds: 75, url: "2" },
-                    { name: "Myni", downloading: false, size: 100, seeds: 75, url: "3" },
-                    { name: "Mo",   downloading: false, size: 100, seeds: 75, url: "4" }
-                ];
-                this._status = Constants.SearchStatuses.NONE;
-                this.emit("change");
-            }.bind(this), 2000);
-        }
-
+        this._status = Constants.SearchStatuses.SEARCHING;
         this.emit("change");
+            
+        setTimeout(function() {
+            for (var i = 0; i < Config.searchPageSize; i++) {
+                this._results.push({ 
+                    name: "A Torrent Name",  
+                    downloading: false, 
+                    size: 100, 
+                    seeds: 75, 
+                    url: i.toString() 
+                });
+            }
+            this._status = Constants.SearchStatuses.NONE;
+            this.emit("change");
+        }.bind(this), 2000); 
+    },
+
+    _onLoadNextSearchResults: function() {
+        this._status = Constants.SearchStatuses.PAGING;
+        this.emit("change");
+
+        setTimeout(function() {
+            this._page = this._page + 1;
+            var start = (this._page - 1) * Config.searchPageSize;
+            var end = start + Config.searchPageSize;
+            for (var i = start; i < end; i++) {
+                this._results.push({ 
+                    name: "A Torrent Name",  
+                    downloading: false, 
+                    size: 100, 
+                    seeds: 75, 
+                    url: i.toString() 
+                });
+            }
+            this._status = Constants.SearchStatuses.NONE;
+            this.emit("change");           
+        }.bind(this), 2000);  
     },
 
     _onStartDownload: function(payload) {

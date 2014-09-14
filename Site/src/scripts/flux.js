@@ -17,9 +17,12 @@ var actions = {
     searchTermEntered: function(searchTerm){
     	this.dispatch(Constants.Actions.SEARCH_TERM_ENTERED, { term: searchTerm });
     },
+    loadNextSearchResults: function(){
+        this.dispatch(Constants.Actions.LOAD_NEXT_SEARCH_RESULTS);
+    },
     startDownload: function(url) {
        this.dispatch(Constants.Actions.START_DOWNLOAD, { url: url }); 
-    }
+    },
 };
 
 var stores = {

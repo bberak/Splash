@@ -21,6 +21,10 @@ var SearchResults = React.createClass({
 	    };
   	},
 
+  	_loadNextPage: function() {
+  		this.getFlux().actions.loadNextSearchResults();
+  	},
+
 	render: function() {
 
 		var results = _.map(this.state.search.results, function(s){
@@ -39,13 +43,19 @@ var SearchResults = React.createClass({
 			return null;
 		};
 
+		var getPagingButton = function(status) {
+			if (status !== Constants.SearchStatuses.PAGING && results.length > 0)
+				return <input type="button" value="Show more.." onClick={this._loadNextPage} />;
+			return null;
+		}.bind(this);
+
 		return (
 			<div>
 				<div>{getSearchingLabel(this.state.search.status)}</div>
 				<ul>{results}</ul>
 				<div>
 					{getPagingLabel(this.state.search.status)}
-					{results.length > 0 ? <input type="button" value="Show more.." /> : null}
+					{getPagingButton(this.state.search.status)}
 				</div>
 			</div>);
 	}
