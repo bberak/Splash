@@ -2,12 +2,14 @@
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
-var DownloadList = require('./downloadList.js');
+var Loader = require('components/loader.js');
+var Constants = require('constants.js');
+var _ = require('lodash');
 
 var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 	StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-var DownloadsView = React.createClass({
+var DownloadList = React.createClass({
 
 	mixins: [FluxChildMixin, StoreWatchMixin("DownloadStore")],
 
@@ -17,13 +19,13 @@ var DownloadsView = React.createClass({
   	},
 
 	render: function() {
+
 		return (
-			<div>
-				<h2>Downloads..</h2>
-				<div><DownloadList /></div>
-			</div>
-		);
+			<ul>
+				<li>Download list goes here</li>
+			</ul>);
 	}
+
 });
 
-module.exports = DownloadsView;
+module.exports = DownloadList;

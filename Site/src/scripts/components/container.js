@@ -22,7 +22,7 @@ var Container = React.createClass({
 	render: function() {
 		var view = null;
 
-		switch(this.state.menus.active){
+		switch(this.state.menus.active.name){
 			case "Search": 
 				view = <SearchView />;
 				break;
@@ -32,7 +32,7 @@ var Container = React.createClass({
 				break;
 				
 			default:
-				view = <h2>Could not find view for {this.state.menus.active}</h2>;
+				view = <h2>Could not find view for {this.state.menus.active.name}</h2>;
 				break;
 		}
 

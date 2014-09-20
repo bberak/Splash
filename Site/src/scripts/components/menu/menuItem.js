@@ -9,10 +9,7 @@ var MenuItem = React.createClass({
 	},
 
 	render: function() {
-		if (this.props.active)
-			return <li><input type="button" style={{"color": "pink"}} value={this.props.key} onClick={this._onClick} /></li>;
-		else
-			return <li><input type="button" value={this.props.key} onClick={this._onClick} /></li>;
+		return <li><input type="button" value={this.props.key + ': ' + this.props.notifications} onClick={this._onClick} /></li>;
 	}
 
 });

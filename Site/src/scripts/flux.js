@@ -1,6 +1,7 @@
 var StartupStore = require('./stores/startupStore.js');
 var MenuStore = require('./stores/menuStore.js');
 var SearchStore = require('./stores/searchStore.js');
+var DownloadStore = require('./stores/downloadStore.js');
 var Constants = require('./constants.js');
 var Fluxxor = require('fluxxor');
 
@@ -28,7 +29,8 @@ var actions = {
 var stores = {
     StartupStore: new StartupStore(),
     MenuStore: new MenuStore(),
-    SearchStore: new SearchStore()
+    SearchStore: new SearchStore(),
+    DownloadStore: new DownloadStore()
 };
 
 var Flux = new Fluxxor.Flux(stores, actions);

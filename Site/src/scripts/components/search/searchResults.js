@@ -27,8 +27,10 @@ var SearchResults = React.createClass({
 
 	render: function() {
 
+		var key = 0;
 		var results = _.map(this.state.search.results, function(s){
-			return <SearchItem key={s.url} name={s.name} downloading={s.downloading} size={s.size} seeds={s.seeds} />;
+			key++;
+			return <SearchItem key={key} url={s.url} name={s.name} size={s.size} seeds={s.seeds} clicked={s.clicked} />;
 		});
 
 		var getSearchingLabel = function(status){

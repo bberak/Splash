@@ -11,7 +11,7 @@ var Constants = {
 	TorrentStatuses: {
 		NONE: "NONE",
 		DOWNLOADING: "DOWNLOADING",
-		DOWNLOADED: "DOWNLOADED",
+		COMPLETE: "COMPLETE",
 		ERROR: "ERROR"
 	},
 	SearchStatuses: {

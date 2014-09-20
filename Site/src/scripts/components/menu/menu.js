@@ -24,7 +24,7 @@ var Menu = React.createClass({
 
 	render: function() {
 		var items = _.map(this.state.menus.all, function(m) {
-			return <MenuItem key={m} onSelected={this._onSelected} active={m === this.state.menus.active} />;
+			return <MenuItem key={m.name} onSelected={this._onSelected} active={m.name === this.state.menus.active.name} notifications={m.notifications} />;
 		}.bind(this));
 
 		return (

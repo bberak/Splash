@@ -3,6 +3,18 @@ var Constants = require('constants.js');
 var Config = require('config.js');
 var _ = require('lodash');
 
+var SearchResult = function(name, size, seeds, url) {
+    this.name = name;
+    this.size = size;
+    this.seeds = seeds;
+    this.url = url;
+    this.clicked = false;
+
+    this.click = function() {
+        this.clicked = true;
+    }
+};
+
 var SearchStore = Fluxxor.createStore({
 
     initialize: function() {
@@ -12,8 +24,8 @@ var SearchStore = Fluxxor.createStore({
         this._status = Constants.SearchStatuses.NONE;
         this.bindActions(
             Constants.Actions.SEARCH_TERM_ENTERED, this._onSearchTermEntered,
-            Constants.Actions.START_DOWNLOAD, this._onStartDownload,
-            Constants.Actions.LOAD_NEXT_SEARCH_RESULTS, this._onLoadNextSearchResults
+            Constants.Actions.LOAD_NEXT_SEARCH_RESULTS, this._onLoadNextSearchResults,
+            Constants.Actions.START_DOWNLOAD, this._onDownloadStarted
         );
     },
 
@@ -47,13 +59,7 @@ var SearchStore = Fluxxor.createStore({
             
         setTimeout(function() {
             for (var i = 0; i < Config.searchPageSize; i++) {
-                this._results.push({ 
-                    name: "A Torrent Name",  
-                    downloading: false, 
-                    size: 100, 
-                    seeds: 75, 
-                    url: i.toString() 
-                });
+                this._results.push(new SearchResult('Name', 100, 75, 'http://' + i.toString()));
             }
             this._status = Constants.SearchStatuses.NONE;
             this.emit("change");
@@ -69,27 +75,22 @@ var SearchStore = Fluxxor.createStore({
             var start = (this._page - 1) * Config.searchPageSize;
             var end = start + Config.searchPageSize;
             for (var i = start; i < end; i++) {
-                this._results.push({ 
-                    name: "A Torrent Name",  
-                    downloading: false, 
-                    size: 100, 
-                    seeds: 75, 
-                    url: i.toString() 
-                });
+                this._results.push(new SearchResult('Name', 100, 75, 'http://' + i.toString()));
             }
             this._status = Constants.SearchStatuses.NONE;
             this.emit("change");           
         }.bind(this), 2000);  
     },
 
-    _onStartDownload: function(payload) {
-        var downloadingItems = _.where(this._results, { url: payload.url });
-        _.forEach(downloadingItems, function(item) {
-            item.downloading = true;
+    _onDownloadStarted: function(payload) {
+        var item = _.find(this._results, function(r) {
+            return r.url === payload.url;
         });
 
-        if (downloadingItems.length > 0)
-            this.emit("change");
+        if (item) {
+            item.click();
+            this.emit('change');
+        }
     },
 
     getState: function() {
