@@ -12,7 +12,7 @@ var SearchItem = React.createClass({
 	mixins: [FluxChildMixin],
 
 	_startDownload: function() {
-		this.getFlux().actions.startDownload(this.props.url);
+		this.getFlux().actions.startDownload(this.props.name, this.props.url);
 	},
 
 	render: function() {

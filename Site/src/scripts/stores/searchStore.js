@@ -2,18 +2,7 @@ var Fluxxor = require('fluxxor');
 var Constants = require('constants.js');
 var Config = require('config.js');
 var _ = require('lodash');
-
-var SearchResult = function(name, size, seeds, url) {
-    this.name = name;
-    this.size = size;
-    this.seeds = seeds;
-    this.url = url;
-    this.clicked = false;
-
-    this.click = function() {
-        this.clicked = true;
-    }
-};
+var SearchResultModel = require('models/searchResultModel.js');
 
 var SearchStore = Fluxxor.createStore({
 
@@ -59,7 +48,7 @@ var SearchStore = Fluxxor.createStore({
             
         setTimeout(function() {
             for (var i = 0; i < Config.searchPageSize; i++) {
-                this._results.push(new SearchResult('Name', 100, 75, 'http://' + i.toString()));
+                this._results.push(new SearchResultModel('Name' + i.toString(), 100, 75, 'http://' + i.toString()));
             }
             this._status = Constants.SearchStatuses.NONE;
             this.emit("change");
@@ -75,7 +64,7 @@ var SearchStore = Fluxxor.createStore({
             var start = (this._page - 1) * Config.searchPageSize;
             var end = start + Config.searchPageSize;
             for (var i = start; i < end; i++) {
-                this._results.push(new SearchResult('Name', 100, 75, 'http://' + i.toString()));
+                this._results.push(new SearchResultModel('Name', 100, 75, 'http://' + i.toString()));
             }
             this._status = Constants.SearchStatuses.NONE;
             this.emit("change");           

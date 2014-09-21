@@ -21,8 +21,8 @@ var actions = {
     loadNextSearchResults: function(){
         this.dispatch(Constants.Actions.LOAD_NEXT_SEARCH_RESULTS);
     },
-    startDownload: function(url) {
-       this.dispatch(Constants.Actions.START_DOWNLOAD, { url: url }); 
+    startDownload: function(name, url) {
+       this.dispatch(Constants.Actions.START_DOWNLOAD, { name: name, url: url }); 
     },
 };
 

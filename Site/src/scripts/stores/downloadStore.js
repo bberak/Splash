@@ -2,6 +2,7 @@ var Fluxxor = require('fluxxor');
 var Constants = require('constants.js');
 var Config = require('config.js');
 var _ = require('lodash');
+var Torrent = require('models/torrent.js');
 
 var DownloadStore = Fluxxor.createStore({
 
@@ -14,14 +15,22 @@ var DownloadStore = Fluxxor.createStore({
     },
 
     _onStartDownload: function(payload) {
-        this._downloads.push({
-            url: payload.url, 
-            name: payload.name,
-            progress: 0.05,
-            status: Constants.TorrentStatuses.DOWNLOADING 
+
+        var existing = _.find(this._downloads, function(d) {
+            return d.url === payload.url;
         });
 
+        if (existing)
+            return;
+
+        var torrent = new Torrent(payload.name, payload.url);
+        this._downloads.push(torrent);
         this.emit("change");
+
+        setTimeout(function() {
+            torrent.startDownloading('C:\\Downloads');
+            this.emit('change');
+        }.bind(this), 2000);        
     },
 
     _startPolling: function() {
@@ -29,13 +38,7 @@ var DownloadStore = Fluxxor.createStore({
         setInterval(function(){
             _.forEach(this._downloads, function(d)
             {
-                if (d.progress < 1.0)
-                    d.progress += 0.01;
-
-                if (d.progress >= 1.0) {
-                    d.progress = 1.0;
-                    d.status = _onStartDownload.TorrentStatuses.COMPLETE;
-                }
+                d.updateProgress(d.progress + 0.01);
             })
             this.emit("change");
         }.bind(this), 2000);

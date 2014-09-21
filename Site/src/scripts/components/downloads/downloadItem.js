@@ -5,12 +5,11 @@ var Fluxxor = require('fluxxor');
 var Loader = require('components/loader.js');
 var Constants = require('constants.js');
 var _ = require('lodash');
-var DownloadItem = require('./downloadItem.js');
 
 var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 	StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-var DownloadList = React.createClass({
+var DownloadItem = React.createClass({
 
 	mixins: [FluxChildMixin, StoreWatchMixin("DownloadStore")],
 
@@ -20,17 +19,14 @@ var DownloadList = React.createClass({
   	},
 
 	render: function() {
-
-		var list = _.map(this.state.downloads, function(d) {
-			return <DownloadItem key={d.url} name={d.name} status={d.status} />;
-		});
-
 		return (
-			<ul>
-				{list}
-			</ul>);
+				<li>
+					<span>{this.props.name}</span>
+					<span>{this.props.status}</span>
+				</li>
+			);
 	}
 
 });
 
-module.exports = DownloadList;
+module.exports = DownloadItem;
