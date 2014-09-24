@@ -22,7 +22,7 @@ var DownloadList = React.createClass({
 	render: function() {
 
 		var list = _.map(this.state.downloads, function(d) {
-			return <DownloadItem key={d.url} name={d.name} status={d.status} />;
+			return <DownloadItem key={d.url} name={d.name} status={d.status} progress={d.progress} />;
 		});
 
 		return (

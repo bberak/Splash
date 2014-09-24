@@ -41,7 +41,7 @@ var DownloadStore = Fluxxor.createStore({
                 d.updateProgress(d.progress + 0.01);
             })
             this.emit("change");
-        }.bind(this), 2000);
+        }.bind(this), 500);
     },
 
     getState: function() {

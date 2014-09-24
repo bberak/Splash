@@ -19,10 +19,34 @@ var DownloadItem = React.createClass({
   	},
 
 	render: function() {
+
+		var getButton = function(status) {
+			switch(status) {
+				case Constants.TorrentStatuses.DOWNLOADING:
+					return null;
+				case Constants.TorrentStatuses.COMPLETE:
+					return <input type="button" value="Open" />;
+				case Constants.TorrentStatuses.ERROR:
+					return <input type="button" value="Try Again" />;
+				default:
+					return null;
+			}
+		}.bind(this);
+
+		var getProgress = function(progress) {
+			progress = parseInt(progress * 100);
+			var dashes = '';
+			for (var i = 0; i < progress; i++)
+				dashes += '-';
+			return dashes + progress + '%';
+		};
+
 		return (
 				<li>
 					<span>{this.props.name}</span>
 					<span>{this.props.status}</span>
+					<span>{getProgress(this.props.progress)}</span>
+					<span>{getButton(this.props.status)}</span>
 				</li>
 			);
 	}

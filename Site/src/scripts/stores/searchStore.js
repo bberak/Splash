@@ -64,7 +64,7 @@ var SearchStore = Fluxxor.createStore({
             var start = (this._page - 1) * Config.searchPageSize;
             var end = start + Config.searchPageSize;
             for (var i = start; i < end; i++) {
-                this._results.push(new SearchResultModel('Name', 100, 75, 'http://' + i.toString()));
+                this._results.push(new SearchResultModel('Name' + i.toString(), 100, 75, 'http://' + i.toString()));
             }
             this._status = Constants.SearchStatuses.NONE;
             this.emit("change");           
