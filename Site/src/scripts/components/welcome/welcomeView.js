@@ -23,8 +23,9 @@ var WelcomeView = React.createClass({
 		return (
 			<div>
 				<h2>Disclosure statement goes here..</h2>
-				<input type="text" placeholder="Select download folder.." ref="folderInput" onKeyDown={this._onKeyDown} autoFocus={true} />
-				<input type="submit" value="I understand" onClick={this._onSelectFolder} />
+				<label>All downloads will be saved to </label>
+				<input type="text" defaultValue={this.props.defaultFolder} placeholder="Type the path to your folder" ref="folderInput" onKeyDown={this._onKeyDown} autoFocus={true} />
+				<input type="submit" value="Cool, let's start" onClick={this._onSelectFolder} />
 			</div>
 		);
 	}

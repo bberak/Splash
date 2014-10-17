@@ -11,25 +11,23 @@ var FluxMixin = Fluxxor.FluxMixin(React),
 
 var Canvas = React.createClass({
 
-	mixins: [FluxMixin, StoreWatchMixin("StartupStore")],
+	mixins: [FluxMixin, StoreWatchMixin("SettingsStore")],
 
 	getStateFromFlux: function() {
-	    return {
-	    	startup: this.getFlux().store("StartupStore").getState()
-	    };
+    	return this.getFlux().store("SettingsStore").getState();
   	},
 
 	render: function() {
 
 		var component = null;
 
-		if (!this.state.startup.ready) {
+		if (!this.state.ready) {
 			component = <Loader />;
 		}
 		else
 		{
-			if (this.state.startup.firstStartup)
-				component = <WelcomeView />;
+			if (this.state.firstStartup)
+				component = <WelcomeView defaultFolder={this.state.defaultDownloadFolder} />;
 			else
 				component = <Container />;
 		}

@@ -1,4 +1,4 @@
-var StartupStore = require('./stores/startupStore.js');
+var SettingsStore = require('./stores/settingsStore.js');
 var MenuStore = require('./stores/menuStore.js');
 var SearchStore = require('./stores/searchStore.js');
 var DownloadStore = require('./stores/downloadStore.js');
@@ -27,7 +27,7 @@ var actions = {
 };
 
 var stores = {
-    StartupStore: new StartupStore(),
+    SettingsStore: new SettingsStore(),
     MenuStore: new MenuStore(),
     SearchStore: new SearchStore(),
     DownloadStore: new DownloadStore()

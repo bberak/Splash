@@ -30,7 +30,7 @@ var SearchBox = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<input type="text" placeholder="Search for something.." ref="searchInput" onKeyDown={this._onKeyDown} autoFocus={true} defaultValue={this.state.search.term} />
+				<input type="text" placeholder="Search for music, movies or games.." ref="searchInput" onKeyDown={this._onKeyDown} autoFocus={true} defaultValue={this.state.search.term} />
 				<input type="submit" value="Find" onClick={this._onSearchTermEntered} />
 			</div>
 		);
