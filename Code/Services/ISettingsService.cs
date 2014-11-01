@@ -7,6 +7,6 @@ namespace Splash.Services
 	{
 		Settings Get();
 
-		void Save(Settings userSettings); 
+		Settings Save(Settings settings); 
 	}
 }

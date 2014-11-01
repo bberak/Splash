@@ -29,9 +29,9 @@ namespace Splash.Modules
             {
                 var settings = this.Bind<Settings>();
 
-                settingsService.Save(settings);
+                settings = settingsService.Save(settings);
 
-                return HttpStatusCode.OK;
+                return this.Response.AsJson(settings);
             };
         }
     }

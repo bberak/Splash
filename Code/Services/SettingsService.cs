@@ -11,7 +11,7 @@ namespace Splash.Services
 
 		public SettingsService()
 		{
-			var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
 			SettingsFile = Dirs.Combine(appDataFolder, "Splash", "Settings.json");
 		}
@@ -25,14 +25,20 @@ namespace Splash.Services
 				return Json.ToObject<Settings>(jsonString);
 			}
 
-			return null;
+			var myDocs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+			return Settings.Default(defaultDownloadsFolder: Dirs.Combine(myDocs, "Splash"));
 		}
 
-		public void Save(Settings userSettings)
+		public Settings Save(Settings settings)
 		{
-			var jsonString = Json.ToString(userSettings);
+			settings.LastModified = DateTime.Now;
+
+			var jsonString = Json.ToString(settings);
 
 			File.WriteAllText(SettingsFile, jsonString);
+
+			return settings;
 		}
 	}
 }
