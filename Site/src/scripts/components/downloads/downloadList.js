@@ -12,7 +12,11 @@ var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 
 var DownloadList = React.createClass({
 
-	mixins: [FluxChildMixin, StoreWatchMixin("DownloadStore")],
+	mixins: [FluxChildMixin, StoreWatchMixin("DownloadStore", "MenuStore")],
+
+	_onFindSomething: function() {
+		this.getFlux().actions.menuSelected("Search");
+	},
 
 	getStateFromFlux: function() {
 	    var flux = this.getFlux();
@@ -21,14 +25,18 @@ var DownloadList = React.createClass({
 
 	render: function() {
 
-		var list = _.map(this.state.downloads, function(d) {
-			return <DownloadItem key={d.url} name={d.name} status={d.status} progress={d.progress} />;
-		});
+		if (this.state.downloads && this.state.downloads.length > 0) {
+			var list = _.map(this.state.downloads, function(d) {
+				return <DownloadItem key={d.url} name={d.name} status={d.status} progress={d.progress} />;
+			});
 
-		return (
-			<ul>
-				{list}
-			</ul>);
+			return (
+				<ul>
+					{list}
+				</ul>);
+		}
+
+		return (<a href="javascript:void(0);" onClick={this._onFindSomething}>No downloads, click here to find something</a>); 
 	}
 
 });

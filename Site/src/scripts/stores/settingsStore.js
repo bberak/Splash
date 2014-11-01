@@ -32,7 +32,7 @@ var SettingsStore = Fluxxor.createStore({
         return {
             ready: this._ready,
             firstStartup: this._firstStartup,
-            downloadFolder: this._downloadFoler,
+            downloadFolder: this._downloadFolder,
             defaultDownloadFolder: this._defaultDownloadFolder
         };
     }

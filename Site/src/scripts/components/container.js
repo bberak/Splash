@@ -5,6 +5,8 @@ var Fluxxor = require('fluxxor');
 var Menu = require('./menu/menu.js');
 var SearchView = require('./search/searchView.js');
 var DownloadsView = require('./downloads/downloadsView.js');
+var SettingsView = require('./settings/settingsView.js');
+var AboutView = require('./about/aboutView.js');
 
 var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 	StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -29,6 +31,14 @@ var Container = React.createClass({
 
 			case "Downloads":
 				view = <DownloadsView />;
+				break;
+
+			case "Settings":
+				view = <SettingsView />;
+				break;
+
+			case "About":
+				view = <AboutView />;
 				break;
 				
 			default:
