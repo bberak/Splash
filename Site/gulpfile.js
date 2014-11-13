@@ -6,82 +6,82 @@ var browserify  = require('gulp-browserify');
 var clean       = require('gulp-clean');
 var runSequence = require('run-sequence');
 
-var sourcePaths = {
-  styles:       ['src/styles/**/*'],
-  images:       ['src/images/**/*'],
-  html:         ['src/html/**/*'],
-  scripts:      ['src/scripts/**/*'],
-  rootScript:   'src/scripts/app.js'
-};
-
-var distPaths = {
-  styles:   'build/styles',
-  scripts:  'build/scripts',
-  images:   'build/images',
-  html:     'build'
-};
-
-var modulePaths = ['./node_modules', './src/scripts'];
-
-var cleanPath = 'build/*';
-
-var server = {
-  host: 'localhost',
-  port: '8001'
+var config = {
+  src: {
+    styles:     ['src/styles/**/*'],
+    images:     ['src/images/**/*'],
+    html:       ['src/html/**/*'],
+    scripts:    ['src/scripts/**/*']
+  },
+  dist: {
+    styles:   'build/styles',
+    scripts:  'build/scripts',
+    images:   'build/images',
+    html:     'build'
+  },
+  browserify: {
+    rootScript: 'src/scripts/app.js',
+    modulePaths: ['./node_modules', './src/scripts']
+  },
+  cleanPaths: ['build/*'],
+  server: {
+    host: 'localhost',
+    port: '8001'
+  }
 };
 
 gulp.task('clean', function() {
-  return gulp.src([cleanPath], {read: false})
+  return gulp.src(config.cleanPaths, {read: false})
     .pipe(plumber())
     .pipe(clean());
 });
 
 gulp.task('styles', function () {
-  gulp.src(sourcePaths.styles)
+  gulp.src(config.src.styles)
     .pipe(plumber())
     .pipe(sass())
-    .pipe(gulp.dest(distPaths.styles));
+    .pipe(gulp.dest(config.dist.styles));
 });
 
 gulp.task('scripts', function() {
-    gulp.src(sourcePaths.rootScript)
-        .pipe(plumber())
-        .pipe(browserify({
-          insertGlobals : false,
-          debug: true,
-          transform: ['reactify'],
-          paths: modulePaths
-        }))
-        .pipe(gulp.dest(distPaths.scripts))
+    gulp.src(config.browserify.rootScript)
+      .pipe(plumber())
+      .pipe(browserify({
+        insertGlobals : false,
+        debug: true,
+        transform: ['reactify'],
+        paths: config.browserify.modulePaths
+      }))
+      .pipe(gulp.dest(config.dist.scripts))
 });
 
 gulp.task('images', function() {
-  return gulp.src(sourcePaths.images)
+  return gulp.src(config.src.images)
     .pipe(plumber())
-    .pipe(gulp.dest(distPaths.images));
+    .pipe(gulp.dest(config.dist.images));
 });
 
 gulp.task('html', function() {
-  return gulp.src(sourcePaths.html)
+  return gulp.src(config.src.html)
     .pipe(plumber())
-    .pipe(gulp.dest(distPaths.html));
+    .pipe(gulp.dest(config.dist.html));
 });
 
 gulp.task('webserver', function() {
-  gulp.src(distPaths.html)
+  gulp.src(config.dist.html)
     .pipe(webserver({
-      host:             server.host,
-      port:             server.port,
-      livereload:       true,
-      open:             true
+      host:         config.server.host,
+      port:         config.server.port,
+      livereload:   true,
+      open:         true
     }));
 });
 
 gulp.task('watch', function(){
-  gulp.watch(sourcePaths.styles,  ['styles']);
-  gulp.watch(sourcePaths.scripts, ['scripts']);
-  gulp.watch(sourcePaths.images,  ['images']);
-  gulp.watch(sourcePaths.html,    ['html']);
+  gulp.watch(config.src.styles,  ['styles']);
+  gulp.watch(config.src.scripts, ['scripts']);
+  gulp.watch(config.src.images,  ['images']);
+  gulp.watch(config.src.html,    ['html']);
 });
 
 gulp.task('build', function(callback) {
