@@ -1,91 +1,91 @@
-var _ = require('lodash/dist/lodash.underscore');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var less = require('gulp-less');
-var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
-var clean = require('gulp-clean');
-var browserify = require('gulp-browserify');
-var rename = require('gulp-rename');
-var minifycss = require('gulp-minify-css');
-var nodemon = require('gulp-nodemon');
-var utils = require('gulp-util');
-var mocha = require('gulp-mocha');
-var browsersync = require('browser-sync');
+var gulp        = require('gulp');
+var plumber     = require('gulp-plumber');
+var sass        = require('gulp-sass');
+var webserver   = require('gulp-webserver');
+var browserify  = require('gulp-browserify');
+var clean       = require('gulp-clean');
+var runSequence = require('run-sequence');
+
+var sourcePaths = {
+  styles:       ['src/styles/**/*'],
+  images:       ['src/images/**/*'],
+  html:         ['src/html/**/*'],
+  scripts:      ['src/scripts/**/*'],
+  rootScript:   'src/scripts/app.js'
+};
+
+var distPaths = {
+  styles:   'build/styles',
+  scripts:  'build/scripts',
+  images:   'build/images',
+  html:     'build'
+};
+
+var modulePaths = ['./node_modules', './src/scripts'];
+
+var cleanPath = 'build/*';
+
+var server = {
+  host: 'localhost',
+  port: '8001'
+};
 
 gulp.task('clean', function() {
-  return gulp.src(['build/*'], {read: false}).pipe(clean());
+  return gulp.src([cleanPath], {read: false})
+    .pipe(plumber())
+    .pipe(clean());
 });
 
-// Browserify scripts
+gulp.task('styles', function () {
+  gulp.src(sourcePaths.styles)
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(gulp.dest(distPaths.styles));
+});
 
 gulp.task('scripts', function() {
-    gulp.src('src/scripts/app.js')
+    gulp.src(sourcePaths.rootScript)
+        .pipe(plumber())
         .pipe(browserify({
           insertGlobals : false,
           debug: true,
           transform: ['reactify'],
-          paths: ['./node_modules','./src/scripts']
+          paths: modulePaths
         }))
-        .on('prebundle', function(bundler) {
-          // Make React available externally for dev tools
-          bundler.require('react');
-        })
-        .on('error', gutil.log)
-        .pipe(gulp.dest('build/scripts'))
-        .pipe(uglify())
-    	.pipe(rename({suffix: '.min'}))
-    	.pipe(gulp.dest('build/scripts'));
+        .pipe(gulp.dest(distPaths.scripts))
 });
-
-// Compile and minify sass
-
-gulp.task('styles', function() {
-  return gulp.src('src/**/*.scss')
-    .pipe(sass({errLogToConsole: true}))
-    .pipe(gulp.dest('build/'))
-    .pipe(minifycss())
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest('build/'));
-});
-
-// Images
 
 gulp.task('images', function() {
-  return gulp.src('src/images/**/*')
-    .pipe(gulp.dest('build/images/'));
+  return gulp.src(sourcePaths.images)
+    .pipe(plumber())
+    .pipe(gulp.dest(distPaths.images));
 });
-
-// Views (html)
 
 gulp.task('html', function() {
-	return gulp.src('src/html/**')
-		.pipe(gulp.dest('build'));
+  return gulp.src(sourcePaths.html)
+    .pipe(plumber())
+    .pipe(gulp.dest(distPaths.html));
 });
 
-// Browser Sync
-
-gulp.task('browsersync', ['default'], function() {
-	browsersync.init(['build/**'], {
-		server: {
-			baseDir: 'build',
-			directory: true
-		}
-	});
+gulp.task('webserver', function() {
+  gulp.src(distPaths.html)
+    .pipe(webserver({
+      host:             server.host,
+      port:             server.port,
+      livereload:       true,
+      open:             true
+    }));
 });
 
-// Watching
-
-gulp.task('watch', ['browsersync'], function() {
-	if (!global.isWatching) {
-		global.isWatching = true;
-		gulp.watch('src/scripts/**', ['scripts']);
-		gulp.watch('src/styles/**', ['styles']);
-		gulp.watch('src/images/**', ['images']);
-		gulp.watch('src/html/**', ['html']);
-	}
+gulp.task('watch', function(){
+  gulp.watch(sourcePaths.styles,  ['styles']);
+  gulp.watch(sourcePaths.scripts, ['scripts']);
+  gulp.watch(sourcePaths.images,  ['images']);
+  gulp.watch(sourcePaths.html,    ['html']);
 });
 
-gulp.task('default', ['clean'], function() {
-  return gulp.start('scripts', 'styles', 'images', 'html', 'watch');
+gulp.task('build', function(callback) {
+  runSequence('clean', ['styles', 'scripts', 'images', 'html'], 'watch', 'webserver', callback);
 });
+
+gulp.task('default', ['build']);
