@@ -4,9 +4,8 @@ var React = require('react');
 var Fluxxor = require('fluxxor');
 var MenuItem = require('./menuItem.js');
 var _ = require('lodash');
-
-var FluxChildMixin = Fluxxor.FluxChildMixin(React),
-	StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var DOWNLOADS_MENU = "Downloads"
 
 var Menu = React.createClass({
 
@@ -23,7 +22,11 @@ var Menu = React.createClass({
   	},
 
 	render: function() {
-		var items = _.map(this.state.menus.all, function(m) {
+		var enabledMenus = _.filter(this.state.menus.all, function(m){
+			return m.enabled;
+		});
+
+		var items = _.map(enabledMenus, function(m) {
 			return <MenuItem key={m.name} onSelected={this._onSelected} active={m.name === this.state.menus.active.name} notifications={m.notifications} />;
 		}.bind(this));
 

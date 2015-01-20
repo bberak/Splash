@@ -6,9 +6,7 @@ var _ = require('lodash');
 var MenuStore = Fluxxor.createStore({
 
     initialize: function() {
-        this._all = _.map(Config.menus, function(m) {
-            return { name: m, notifications: 0 };
-        });
+        this._all = Config.menus;
         this._active = this._all[0];
         this.bindActions(
             Constants.Actions.MENU_SELECTED, this._onMenuSelected,
@@ -28,10 +26,9 @@ var MenuStore = Fluxxor.createStore({
             return m.name === 'Downloads';
         });
 
-        if (downloadsMenu) {
-            downloadsMenu.notifications++;
-            this.emit('change');
-        }
+        downloadsMenu.notifications++;
+        downloadsMenu.enabled = true;
+        this.emit('change');
     },
 
     getState: function() {

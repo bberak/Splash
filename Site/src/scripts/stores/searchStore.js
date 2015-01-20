@@ -4,6 +4,7 @@ var Config = require('config.js');
 var _ = require('lodash');
 var SearchResultModel = require('models/searchResultModel.js');
 
+
 var SearchStore = Fluxxor.createStore({
 
     initialize: function() {

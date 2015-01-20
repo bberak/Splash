@@ -2,8 +2,8 @@
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
-
 var FluxChildMixin = Fluxxor.FluxChildMixin(React);
+var ENTER = 13;
 
 var WelcomeView = React.createClass({
 
@@ -15,7 +15,7 @@ var WelcomeView = React.createClass({
 	},
 
 	_onKeyDown: function(e) {
-		if (e.keyCode === 13)
+		if (e.keyCode === ENTER)
 			this._onSelectFolder();
 	},
 
