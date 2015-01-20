@@ -7,10 +7,12 @@ var SearchResultModel = require('models/searchResultModel.js');
 var SearchStore = Fluxxor.createStore({
 
     initialize: function() {
-        this._term = null;
+        
+        this._searchTerm = null;
         this._page = null;
         this._results = [];
         this._status = Constants.SearchStatuses.NONE;
+
         this.bindActions(
             Constants.Actions.SEARCH_TERM_ENTERED, this._onSearchTermEntered,
             Constants.Actions.LOAD_NEXT_SEARCH_RESULTS, this._onLoadNextSearchResults,
@@ -18,60 +20,122 @@ var SearchStore = Fluxxor.createStore({
         );
     },
 
-    _isValidSearchTerm: function(currentSearchTerm, newSearchTerm){
+    _sanitizeSearchTerm: function(searchTerm) {
 
-        if (!newSearchTerm)
-            return false;
+        if (searchTerm) {
+            searchTerm = searchTerm.trim();
+        }
 
-        if (newSearchTerm.length < 1)
-            return false;
+        return searchTerm;
+    },
 
-        if (currentSearchTerm === newSearchTerm)
-            return false;
+    _isSearchTermNullOrWhitespace: function(searchTerm) {
 
-        if (currentSearchTerm && currentSearchTerm.valueOf() === newSearchTerm.valueOf())
-            return false;
+        if (!searchTerm)
+            return true;
 
-        return true;
+        if (searchTerm.trim().length < 1)
+            return true;
+
+        return false;
     },
 
     _onSearchTermEntered: function(payload) {
 
-        if (this._isValidSearchTerm(this._term, payload.term) == false)
-            return;
+        var searchTerm = this._sanitizeSearchTerm(payload.term);
 
-        this._results.length = 0;
-        this._term = payload.term;
-        this._page = 1;
-        this._status = Constants.SearchStatuses.SEARCHING;
-        this.emit("change");
-            
-        setTimeout(function() {
-            for (var i = 0; i < Config.searchPageSize; i++) {
-                this._results.push(new SearchResultModel('Name' + i.toString(), 100, 75, 'http://' + i.toString()));
-            }
+        if (this._isSearchTermNullOrWhitespace(searchTerm)){
+
+            this._searchTerm = null;
+            this._page = null;
+            this._results = [];
             this._status = Constants.SearchStatuses.NONE;
             this.emit("change");
+
+            return;
+        }
+
+        if (searchTerm === this._searchTerm)
+            return;
+
+        console.log(searchTerm + "-" + this._searchTerm)
+
+        this._searchTerm = searchTerm;
+
+        setTimeout(function() {
+
+            if (this._searchTerm === searchTerm) {
+
+                this._page = 1;
+                this._results = [];
+                this._status = Constants.SearchStatuses.SEARCHING;
+                this.emit("change");
+
+                this._performSearch(this._searchTerm, this._page, Config.searchPageSize, function(results){
+
+                    if (this._searchTerm === results.searchTerm &&
+                        this._page === results.page) {
+                     
+                        console.log(this._searchTerm + "-" + searchTerm)
+
+                        this._results = results.items;
+                        this._status = Constants.SearchStatuses.NONE;
+                        this.emit("change");
+                    }
+
+                }.bind(this));
+            }
+        }.bind(this), 800);
+    },
+
+    _performSearch: function(searchTerm, page, pageSize, onSuccess) {
+
+        setTimeout(function() {
+
+            var results = { 
+                searchTerm: searchTerm, 
+                page: page,
+                pageSize: pageSize,
+                items: [] 
+            };
+
+            for (var i = 0; i < pageSize; i++) {
+                var name = searchTerm + "-" + page + "-" + i;
+                var url = "http://"  + searchTerm + "-" + page + "-" + i;
+                results.items.push(new SearchResultModel(name, 100, 75, url));
+            }
+
+            onSuccess(results);
+
         }.bind(this), 2000); 
     },
 
     _onLoadNextSearchResults: function() {
+
+        if (this._isSearchTermNullOrWhitespace(this._searchTerm))
+            return;
+        
         this._status = Constants.SearchStatuses.PAGING;
         this.emit("change");
 
-        setTimeout(function() {
-            this._page = this._page + 1;
-            var start = (this._page - 1) * Config.searchPageSize;
-            var end = start + Config.searchPageSize;
-            for (var i = start; i < end; i++) {
-                this._results.push(new SearchResultModel('Name' + i.toString(), 100, 75, 'http://' + i.toString()));
+        this._performSearch(this._searchTerm, this._page + 1, Config.searchPageSize, function(results){
+
+            if (this._searchTerm === results.searchTerm &&
+                (this._page +1) === results.page) {
+             
+                console.log(this._searchTerm + "-" + results.searchTerm)
+
+                this._page = results.page;
+                this._results = this._results.concat(results.items);
+                this._status = Constants.SearchStatuses.NONE;
+                this.emit("change");
             }
-            this._status = Constants.SearchStatuses.NONE;
-            this.emit("change");           
-        }.bind(this), 2000);  
+
+        }.bind(this));
     },
 
     _onDownloadStarted: function(payload) {
+
         var item = _.find(this._results, function(r) {
             return r.url === payload.url;
         });
@@ -83,8 +147,9 @@ var SearchStore = Fluxxor.createStore({
     },
 
     getState: function() {
+
         return {
-            term: this._term,
+            term: this._searchTerm,
             status: this._status,
             results: this._results
         };

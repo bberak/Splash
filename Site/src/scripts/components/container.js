@@ -11,6 +11,8 @@ var AboutView = require('./about/aboutView.js');
 var FluxChildMixin = Fluxxor.FluxChildMixin(React),
 	StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
+var SEARCH_MENU_NAME = "Search";
+
 var Container = React.createClass({
 
 	mixins: [FluxChildMixin, StoreWatchMixin("MenuStore")],
@@ -20,6 +22,10 @@ var Container = React.createClass({
 	    	menus: this.getFlux().store("MenuStore").getState()
 	    };
   	},
+
+  	_onKeyDown: function(e) {
+		this.getFlux().actions.menuSelected(SEARCH_MENU_NAME);
+	},
 
 	render: function() {
 		var view = null;
@@ -47,7 +53,7 @@ var Container = React.createClass({
 		}
 
 		return (
-			<div>
+			<div className="container" tabIndex="1" onKeyDown={this._onKeyDown} >
 				<Menu />
 				<hr />
 				{view}

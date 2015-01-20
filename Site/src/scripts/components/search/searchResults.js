@@ -35,7 +35,7 @@ var SearchResults = React.createClass({
 
 		var getSearchingLabel = function(status){
 			if (status === Constants.SearchStatuses.SEARCHING)
-				return <Loader phrase={"Searching for: " + this.state.search.term} />;
+				return <Loader phrase="Searching..." />;
 			return null;
 		}.bind(this);
 
