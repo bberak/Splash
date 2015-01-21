@@ -5,7 +5,8 @@ var Config = {
 		{ name: 'Settings', notifications: 0, enabled: true }, 
 		{ name: 'About', notifications: 0, enabled: true  }
 	],
-	searchPageSize: 10
+	searchPageSize: 10,
+	searchDelayInMilliseconds: 600
 };
 
 module.exports = Config;

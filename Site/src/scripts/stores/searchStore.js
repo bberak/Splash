@@ -4,7 +4,6 @@ var Config = require('config.js');
 var _ = require('lodash');
 var SearchResultModel = require('models/searchResultModel.js');
 
-
 var SearchStore = Fluxxor.createStore({
 
     initialize: function() {
@@ -68,7 +67,9 @@ var SearchStore = Fluxxor.createStore({
             if (this._searchTerm === searchTerm) {
 
                 this._page = 1;
-                this._results = [];
+                //-- Want the result list to clear as soon as 
+                //-- a search begins? Uncomment the line below.
+                //this._results = [];
                 this._status = Constants.SearchStatuses.SEARCHING;
                 this.emit("change");
 
@@ -86,7 +87,7 @@ var SearchStore = Fluxxor.createStore({
 
                 }.bind(this));
             }
-        }.bind(this), 800);
+        }.bind(this), Config.searchDelayInMilliseconds);
     },
 
     _performSearch: function(searchTerm, page, pageSize, onSuccess) {

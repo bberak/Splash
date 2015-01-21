@@ -2,17 +2,15 @@
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
-
-var FluxChildMixin = Fluxxor.FluxChildMixin(React),
-	StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var TextInput = require('components/textInput.js');
 
 var SearchBox = React.createClass({
 
 	mixins: [FluxChildMixin, StoreWatchMixin("SearchStore")],
 
-	_onKeyUp: function(e) {
-		var searchInput = this.refs.searchInput.getDOMNode();
-		this.getFlux().actions.searchTermEntered(searchInput.value);
+	_onKeyUp: function(e, value) {
+		this.getFlux().actions.searchTermEntered(value);
 	},
 
 	getStateFromFlux: function() {
@@ -25,7 +23,12 @@ var SearchBox = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<input type="text" placeholder="Search for music, movies or games.." ref="searchInput" onKeyUp={this._onKeyUp} autoFocus={true} defaultValue={this.state.search.term} />
+				<TextInput 
+					placeholder="Search for music, movies or games.." 
+					ref="searchInput" 
+					autoFocus={true} v
+					value={this.state.search.term} 
+					onKeyUp={this._onKeyUp} />
 			</div>
 		);
 	}

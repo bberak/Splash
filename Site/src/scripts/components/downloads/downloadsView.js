@@ -3,9 +3,7 @@
 var React = require('react');
 var Fluxxor = require('fluxxor');
 var DownloadList = require('./downloadList.js');
-
-var FluxChildMixin = Fluxxor.FluxChildMixin(React),
-	StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var DownloadsView = React.createClass({
 

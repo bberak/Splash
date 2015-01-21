@@ -3,20 +3,18 @@
 var React = require('react');
 var Fluxxor = require('fluxxor');
 var FluxChildMixin = Fluxxor.FluxChildMixin(React);
-var ENTER = 13;
+var TextInput = require('components/textInput.js');
 
 var WelcomeView = React.createClass({
 
 	mixins: [FluxChildMixin],
 
-	_onSelectFolder: function() {
-		var folderInput = this.refs.folderInput.getDOMNode();
-		this.getFlux().actions.downloadFolderSelected(folderInput.value);
+	_onSelectFolder: function(value) {
+		this.getFlux().actions.downloadFolderSelected(value);
 	},
 
-	_onKeyDown: function(e) {
-		if (e.keyCode === ENTER)
-			this._onSelectFolder();
+	_onClick: function() {
+		this._onSelectFolder(this.refs.folderInput.getValue());
 	},
 
 	render: function() {
@@ -24,8 +22,8 @@ var WelcomeView = React.createClass({
 			<div>
 				<h2>Disclosure statement goes here..</h2>
 				<label>All downloads will be saved to </label>
-				<input type="text" defaultValue={this.props.defaultFolder} placeholder="Type the path to your folder" ref="folderInput" onKeyDown={this._onKeyDown} autoFocus={true} />
-				<input type="submit" value="Cool, let's start" onClick={this._onSelectFolder} />
+				<TextInput ref="folderInput" value={this.props.defaultFolder} placeholder="Type the path to your folder" autoFocus={true} onEnter={this._onSelectFolder} />
+				<input type="submit" value="Cool, let's start" onClick={this._onClick} />
 			</div>
 		);
 	}

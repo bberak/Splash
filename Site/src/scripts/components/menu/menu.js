@@ -5,6 +5,7 @@ var Fluxxor = require('fluxxor');
 var MenuItem = require('./menuItem.js');
 var _ = require('lodash');
 var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
+
 var DOWNLOADS_MENU = "Downloads"
 
 var Menu = React.createClass({

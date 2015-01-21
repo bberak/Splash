@@ -6,21 +6,14 @@ var Loader = require('components/loader.js');
 var Constants = require('constants.js');
 var _ = require('lodash');
 var DownloadItem = require('./downloadItem.js');
-
-var FluxChildMixin = Fluxxor.FluxChildMixin(React),
-	StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var DownloadList = React.createClass({
 
-	mixins: [FluxChildMixin, StoreWatchMixin("DownloadStore", "MenuStore")],
-
-	_onFindSomething: function() {
-		this.getFlux().actions.menuSelected("Search");
-	},
+	mixins: [FluxChildMixin, StoreWatchMixin("DownloadStore")],
 
 	getStateFromFlux: function() {
-	    var flux = this.getFlux();
-	    return flux.store("DownloadStore").getState();
+	    return this.getFlux().store("DownloadStore").getState();
   	},
 
 	render: function() {
@@ -36,7 +29,7 @@ var DownloadList = React.createClass({
 				</ul>);
 		}
 
-		return (<a href="javascript:void(0);" onClick={this._onFindSomething}>No downloads, click here to find something</a>); 
+		return <h3>Start typing to search</h3>; 
 	}
 
 });
