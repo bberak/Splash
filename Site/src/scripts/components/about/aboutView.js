@@ -2,9 +2,7 @@
 
 var React = require('react');
 var Fluxxor = require('fluxxor');
-
-var FluxChildMixin = Fluxxor.FluxChildMixin(React),
-	StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var AboutView = React.createClass({
 
@@ -12,7 +10,7 @@ var AboutView = React.createClass({
 
 	render: function() {
 		return (
-			<div>
+			<div className="aboutView">
 				<h2>About</h2>
 				<ul>
 					<li>ReactJS</li>

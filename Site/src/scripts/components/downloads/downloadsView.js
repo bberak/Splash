@@ -16,7 +16,7 @@ var DownloadsView = React.createClass({
 
 	render: function() {
 		return (
-			<div>
+			<div className="downloadsView">
 				<h2>Downloads..</h2>
 				<div><DownloadList /></div>
 			</div>

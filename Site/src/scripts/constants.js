@@ -18,6 +18,10 @@ var Constants = {
 		NONE: "NONE",
 		SEARCHING: "SEARCHING",
 		PAGING: "PAGING"
+	},
+	Keys: {
+		ENTER: 13,
+		BACKSPACE: 8
 	}
 };
 
