@@ -5,6 +5,7 @@ var Fluxxor = require('fluxxor');
 var MenuItem = require('./menuItem.js');
 var _ = require('lodash');
 var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var Block = require('components/block.js');
 
 var Menu = React.createClass({
 
@@ -30,9 +31,9 @@ var Menu = React.createClass({
 		}.bind(this));
 
 		return (
-			<div>
+			<Block className="menu" onKeyDown={this.props.onKeyDown}>
 				<ul>{items}</ul>
-			</div>
+			</Block>
 		);
 	}
 

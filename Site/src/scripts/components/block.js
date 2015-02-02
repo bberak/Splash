@@ -21,7 +21,6 @@ var Block = React.createClass({
     },
 
     onKeyDown: function(e){
-        console.log(e.keyCode);
         if (this.props.onKeyDown)
             this.props.onKeyDown(e, this.props.tag);
 

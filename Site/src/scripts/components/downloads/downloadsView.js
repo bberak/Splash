@@ -4,6 +4,7 @@ var React = require('react');
 var Fluxxor = require('fluxxor');
 var DownloadList = require('./downloadList.js');
 var FluxChildMixin = Fluxxor.FluxChildMixin(React), StoreWatchMixin = Fluxxor.StoreWatchMixin;
+var Block = require('components/block.js');
 
 var DownloadsView = React.createClass({
 
@@ -16,10 +17,10 @@ var DownloadsView = React.createClass({
 
 	render: function() {
 		return (
-			<div className="downloadsView">
+			<Block className="downloadsView" onKeyDown={this.props.onKeyDown}>
 				<h2>Downloads..</h2>
 				<div><DownloadList /></div>
-			</div>
+			</Block>
 		);
 	}
 });

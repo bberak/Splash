@@ -27,7 +27,28 @@ var TextInput = React.createClass({
         // Focus the END of the input (if it has a value and autofocus is set to true)
         if (this.props.value && this.props.autoFocus) {
             this.moveCaretToEnd();
+            console.log('Moved caret to the end')
         }
+    },
+
+    /*componentDidUpdate: function() {
+
+        // Focus the END of the input (if it has a value and autofocus is set to true)
+        if (this.props.value && this.props.autoFocus) {
+            var el = this.getDOMNode();
+            var tempVal = el.value;
+            el.value = null;
+            el.value = tempVal;
+            el.focus()
+        }
+    },*/
+
+    focus: function() {
+        var el = this.getDOMNode();
+        var tempVal = el.value;
+        el.value = null;
+        el.value = tempVal;
+        el.focus();
     },
 
     moveCaretToEnd: function() {
@@ -77,8 +98,7 @@ var TextInput = React.createClass({
                 defaultValue={this.props.value}
                 placeholder={this.props.placeholder}
                 autoFocus={this.props.autoFocus}
-                ref="textBox"
-            />
+                ref="textBox" />
         );
     }
 });

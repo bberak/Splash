@@ -22,8 +22,10 @@ var Container = React.createClass({
   	},
 
   	_onKeyDown: function(e) {
-  		this.getFlux().actions.searchTermEntered(null);
-		this.getFlux().actions.menuSelected("Search");
+		if (this.refs.searchView)
+			this.refs.searchView.focus();
+		else
+			this.getFlux().actions.menuSelected("Search");
 	},
 
 	render: function() {
@@ -31,11 +33,11 @@ var Container = React.createClass({
 
 		switch(this.state.menus.active.name){
 			case "Search": 
-				view = <SearchView />;
+				view = <SearchView ref="searchView" date={new Date()} onKeyDown={this._onKeyDown} />;
 				break;
 
 			case "Downloads":
-				view = <DownloadsView />;
+				view = <DownloadsView onKeyDown={this._onKeyDown} />;
 				break;
 
 			case "Settings":
@@ -43,17 +45,20 @@ var Container = React.createClass({
 				break;
 
 			case "About":
-				view = <AboutView />;
+				view = <AboutView onKeyDown={this._onKeyDown} />;
 				break;
 				
 			default:
-				view = <h2>Could not find view for {this.state.menus.active.name}</h2>;
+				view = 
+					(<Block onKeyDown={this._onKeyDown}>
+						<h2>Could not find view for {this.state.menus.active.name}</h2>
+					</Block>)
 				break;
 		}
-
+		
 		return (
-			<Block className="container" onKeyDown={this._onKeyDown}>
-				<Menu />
+			<Block className="container">
+				<Menu onKeyDown={this._onKeyDown} />
 				<hr />
 				{view}
 			</Block>

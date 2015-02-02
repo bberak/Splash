@@ -20,6 +20,10 @@ var SearchBox = React.createClass({
 	    };
   	},
 
+  	focus: function() {
+  		this.refs.searchInput.focus();
+  	},
+
 	render: function() {
 		return (
 			<div>
