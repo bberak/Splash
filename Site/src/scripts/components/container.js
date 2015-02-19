@@ -22,10 +22,13 @@ var Container = React.createClass({
   	},
 
   	_onKeyDown: function(e) {
-		if (this.refs.searchView)
-			this.refs.searchView.focus();
-		else
+  		this.getFlux().actions.searchTermEntered(null);
+		if (this.refs.searchView) {
+			this.refs.searchView.focus(); console.log("focused")
+		} 
+		else {
 			this.getFlux().actions.menuSelected("Search");
+		}
 	},
 
 	render: function() {
@@ -33,7 +36,7 @@ var Container = React.createClass({
 
 		switch(this.state.menus.active.name){
 			case "Search": 
-				view = <SearchView ref="searchView" date={new Date()} onKeyDown={this._onKeyDown} />;
+				view = <SearchView ref="searchView" onKeyDown={this._onKeyDown} />;
 				break;
 
 			case "Downloads":
