@@ -21,7 +21,7 @@ var config = {
     html:     'build'
   },
   browserify: {
-    rootScript: 'src/scripts/app.js',
+    rootScript: 'src/scripts/start.js',
     modulePaths: ['./node_modules', './src/scripts']
   },
   cleanPaths: ['build/*'],
