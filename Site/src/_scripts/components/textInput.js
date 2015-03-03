@@ -3,6 +3,7 @@
 var React  = require('react');
 
 var ENTER = 13;
+var ESCAPE = 27;
 
 var TextInput = React.createClass({
     displayName: 'TextInput',
@@ -62,12 +63,20 @@ var TextInput = React.createClass({
             this.props.onKeyDown(e, e.target.value);
 
         if (this.props.onEnter && e.keyCode === ENTER)
-            this.props.onEnter(e.target.value);
+            this.props.onEnter(e, e.target.value);
+
+        if (this.props.onEscape && e.keyCode === ESCAPE)
+            this.props.onEscape(e, e.target.value);
     },
 
     onKeyUp: function(e){
         if (this.props.onKeyUp)
             this.props.onKeyUp(e, e.target.value);
+    },
+
+    onBlur: function (e) {
+        if (this.props.onBlur)
+            this.props.onBlur(e, e.target.value);
     },
 
     getValue: function() {
@@ -82,6 +91,7 @@ var TextInput = React.createClass({
                 onChange={this.onChange}
                 onKeyDown={this.onKeyDown}
                 onKeyUp={this.onKeyUp}
+                onBlur={this.onBlur}
                 defaultValue={this.props.value}
                 placeholder={this.props.placeholder}
                 autoFocus={this.props.autoFocus}
