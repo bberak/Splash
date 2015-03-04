@@ -4,7 +4,7 @@ var Actions = Reflux.createActions([
 	"search",
 	"beginDownload",
 	"cancelDownload",
-	"removeDownload"
+	"removeDownload",
 	"updateSettings",
 	"openFolder",
 	"runFile"
