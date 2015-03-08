@@ -7,7 +7,8 @@ var SettingsStore = Reflux.createStore({
   	// this will be called by all listening components as they register their listeners
     getInitialState: function() {
         this.settings = {
-            dateModified: new Date()
+            dateModified: new Date(),
+            downloadsFolder: "C:/Users/Boris/Local/AppData/Splash/Downloads"
         };
 
         return this.settings;

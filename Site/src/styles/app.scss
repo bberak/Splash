@@ -8,30 +8,6 @@ body {
   background-color: $bg-color;
 }
 
-.container {
-	outline: 0px;
-}
-
-.menu {
-	outline: 0px;
-}
-
-.welcomeView {
-	outline: 0px;
-}
-
-.settingsView {
-	outline: 0px;
-}
-
-.searchView {
-	outline: 0px;
-}
-
-.downloadsView {
-	outline: 0px;
-}
-
-.aboutView {
-	outline: 0px;
+.selected {
+	font-weight: bold;
 }
