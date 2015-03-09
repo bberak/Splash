@@ -1,7 +1,6 @@
 var Reflux = require("reflux");
 
 var Actions = Reflux.createActions([
-	"search",
 	"beginDownload",
 	"cancelDownload",
 	"removeDownload",
@@ -9,5 +8,7 @@ var Actions = Reflux.createActions([
 	"openFolder",
 	"runFile"
 ]);
+
+Actions.search = Reflux.createAction({ children: ["completed", "failed"] });
 
 module.exports = Actions;
