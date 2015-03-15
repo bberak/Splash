@@ -4,6 +4,8 @@ var React = require("react");
 var ReactRouter = require("react-router");
 var Reflux = require("reflux");
 var SearchStore = require("stores/search/searchStore.js");
+var SearchBox = require("./searchBox.js");
+var SearchResultList = require("./searchResultList.js");
 
 var SearchView = React.createClass({
     
@@ -11,7 +13,11 @@ var SearchView = React.createClass({
 
     render: function() {
         return (
-            <h2>Search</h2>
+        	<div>
+	            <h2>Search</h2>
+	            <SearchBox />
+	            <SearchResultList />
+            </div>
         );
     }
 });

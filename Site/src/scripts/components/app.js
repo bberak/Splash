@@ -3,12 +3,9 @@
 var React = require("react");
 var ReactRouter = require("react-router");
 var Reflux = require("reflux");
-var SettingsStore = require("stores/settings/settingsStore.js");
 var Menu = require("./menu/menu.js");
 
 var App = React.createClass({
-    
-	mixins: [Reflux.connect(SettingsStore, "settings")],
 
     render: function() {
         return (

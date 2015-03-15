@@ -1,12 +1,13 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var TextInput = require("components/textInput.js");
 
 var SearchBox = React.createClass({
 
     render: function() {
         return (
-            <h3>SearchBox</h3>
+        	<TextInput autoFocus={true} placeholder="Start typing to search" />
         );
     }
 });

@@ -6,7 +6,7 @@ var SearchResultItem = React.createClass({
 
     render: function() {
         return (
-            <h3>SearchResultItem</h3>    
+            <h4>SearchResultItem</h4>    
         );
     }
 });
