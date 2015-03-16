@@ -8,9 +8,11 @@ var SearchStore = Reflux.createStore({
     getInitialState: function() {
         this.searchData = {
             query: "",
-            musicResults: new SearchResults("music"),
-            videoResults: new SearchResults("video"),
-            gameResults: new SearchResults("game")
+            results: [
+            	new SearchResults("Music"), 
+            	new SearchResults("Video"), 
+            	new SearchResults("Games")
+        	]
         };
 
         return this.searchData;

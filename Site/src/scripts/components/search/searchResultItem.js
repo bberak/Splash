@@ -4,9 +4,15 @@ var React = require("react");
 
 var SearchResultItem = React.createClass({
 
+	getDefaultProps: function() {
+		return {
+			name: "Unknown"
+		};
+	},
+
     render: function() {
         return (
-            <h4>SearchResultItem</h4>    
+            <li>this.props.name</li>    
         );
     }
 });

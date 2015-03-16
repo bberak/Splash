@@ -20,7 +20,7 @@ var TextInput = React.createClass({
             autoFocus: false,
             placeholder: 'Component name, keyword or similar',
             value: '',
-            className : '',
+            className : ''
         };
     },
 
@@ -52,8 +52,6 @@ var TextInput = React.createClass({
     },
 
     onChange: function(e) {
-        var newValue = e.target.value;
-
         if (this.props.onChange)
             this.props.onChange(e.target.value);
     },
