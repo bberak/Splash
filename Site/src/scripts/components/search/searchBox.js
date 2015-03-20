@@ -8,7 +8,7 @@ var SearchBox = React.createClass({
 	getDefaultProps: function() {
 		return {
 			query: "",
-			changeDelay: 2000
+			changeDelay: 500
 		}
 	},
 
@@ -17,14 +17,27 @@ var SearchBox = React.createClass({
 		this.potentialQuery = value;
 		
 		setTimeout(function() {
-			if (this.potentialQuery === value && value !== this.props.query)
-				alert(value);
+			if (this.potentialQuery === value && 
+				value !== this.props.query &&
+				this.props.onQueryChange) {
+				this.props.onQueryChange(value);
+			}
+				
 		}.bind(this), this.props.changeDelay);
 	},
 
+	onEscape: function (e) {
+        e.target.value = "";
+    },
+
     render: function() {
         return (
-        	<TextInput autoFocus={true} placeholder="Start typing to search" value={this.props.query} onChange={this.onChange} />
+        	<TextInput 
+        		autoFocus={true} 
+        		placeholder="Start typing to search" 
+        		value={this.props.query} 
+        		onChange={this.onChange} 
+        		onEscape={this.onEscape} />
         );
     }
 });

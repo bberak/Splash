@@ -7,10 +7,15 @@ var SearchStore = require("stores/search/searchStore.js");
 var SearchBox = require("./searchBox.js");
 var SearchResultList = require("./searchResultList.js");
 var _ = require("lodash");
+var Actions = require("actions.js");
 
 var SearchView = React.createClass({
     
 	mixins: [Reflux.connect(SearchStore, "searchData")],
+
+    onQueryChange: function(newQuery) {
+        Actions.search(newQuery)
+    },
 
     render: function() {
 
@@ -21,7 +26,7 @@ var SearchView = React.createClass({
         return (
         	<div>
 	            <h2>Search</h2>
-	            <SearchBox query={this.state.searchData.query} />
+	            <SearchBox query={this.state.searchData.query} onQueryChange={this.onQueryChange} />
 	            {resultLists}
             </div>
         );
