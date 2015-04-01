@@ -4,7 +4,7 @@ var SearchResults = function(category) {
     this.page = 0;
     this.pageSize = 0;
     this.items = [];
-    this.isWorking = false;
+    this.status = "";
 };
 
 module.exports = SearchResults;

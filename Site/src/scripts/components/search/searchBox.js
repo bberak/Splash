@@ -8,7 +8,7 @@ var SearchBox = React.createClass({
 	getDefaultProps: function() {
 		return {
 			query: "",
-			changeDelay: 500
+			throttle: 500
 		}
 	},
 
@@ -23,7 +23,7 @@ var SearchBox = React.createClass({
 				this.props.onQueryChange(value);
 			}
 				
-		}.bind(this), this.props.changeDelay);
+		}.bind(this), this.props.throttle);
 	},
 
 	onEscape: function (e) {

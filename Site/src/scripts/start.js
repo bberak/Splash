@@ -7,6 +7,7 @@ var SearchView = require("components/search/searchView.js");
 var DownloadsView = require("components/downloads/downloadsView.js");
 var SettingsView = require("components/settings/settingsView.js");
 var AboutView = require("components/about/aboutView.js");
+var _ = require("lodash");
 
 var routes = (
     <ReactRouter.Route handler={App}>

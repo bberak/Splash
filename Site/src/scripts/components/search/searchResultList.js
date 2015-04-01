@@ -22,6 +22,7 @@ var SearchResultList = React.createClass({
         return (
         	<div>
         		<h3>{this.props.category}</h3>
+                <span>{this.props.status}</span>
             	<ul>
             		{items}
             	</ul>

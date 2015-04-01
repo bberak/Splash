@@ -20,7 +20,7 @@ var SearchView = React.createClass({
     render: function() {
 
         var resultLists = _.map(this.state.searchData.results, function(r) {
-            return <SearchResultList category={r.category} key={r.category} />;
+            return <SearchResultList category={r.category} key={r.category} status={r.status} />;
         });
 
         return (
