@@ -17,23 +17,37 @@ var SearchStore = Reflux.createStore({
 		newQuery = sanitize(newQuery);
 		this.searchData.query = newQuery;
 		_.forEach(this.searchData.results, function(r) {
-			r.status = "Searching"
+			r.searching(newQuery);
 		});
 		this.update();
 	},
 
-	onSearchCompleted: function(category, results) {
-
-	},
-
-	onSearchFailed: function(category, error) {
+	onSearchCompleted: function(query, category, results) {
 		var categoryResults = _.find(this.searchData.results, function(r) {
 			return r.category.toLowerCase() === category.toLowerCase();
-		})
+		});
 		if (categoryResults) {
-			categoryResults.status = error.toString();
+			categoryResults.searchCompleted(query, results);
 			this.update();
 		}
+	},
+
+	onSearchFailed: function(query, category, error) {
+		var categoryResults = _.find(this.searchData.results, function(r) {
+			return r.category.toLowerCase() === category.toLowerCase();
+		});
+		if (categoryResults) {
+			categoryResults.searchFailed(query, error);
+			this.update();
+		}
+	},
+
+	onClearSearch: function() {
+		_.forEach(this.searchData.results, function(r) {
+			r.clear();
+		});
+		this.searchData.query = "";
+		this.update();
 	},
 
 	update: function (newSearchData) {
@@ -50,7 +64,7 @@ var SearchStore = Reflux.createStore({
             query: "",
             results: [
             	new SearchResults("Music"), 
-            	new SearchResults("Video"), 
+            	new SearchResults("Videos"), 
             	new SearchResults("Games")
         	]
         };

@@ -9,22 +9,28 @@ var SearchResultList = React.createClass({
 	getDefaultProps: function() {
 		return {
 			category: "Unknown",
+            status: "Unknown",
 			items: []
 		};
 	},
 
     render: function() {
+        if (this.props.status !== "Searching")  {
+            if (this.props.items.length === 0) {
+                return <div />;
+            }
+        }
 
-		var items = _.map(this.props.items, function(i) {
+		var searchResultItems = _.map(this.props.items, function(i) {
 			return <SearchResultItem name={i.name} key={i.url} />;
 		});
-
+       
         return (
         	<div>
         		<h3>{this.props.category}</h3>
                 <span>{this.props.status}</span>
             	<ul>
-            		{items}
+            		{searchResultItems}
             	</ul>
             </div>
         );

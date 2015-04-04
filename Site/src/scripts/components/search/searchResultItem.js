@@ -12,7 +12,7 @@ var SearchResultItem = React.createClass({
 
     render: function() {
         return (
-            <li>this.props.name</li>    
+            <li>{this.props.name}</li>    
         );
     }
 });

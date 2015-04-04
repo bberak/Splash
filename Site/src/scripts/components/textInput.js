@@ -53,7 +53,7 @@ var TextInput = React.createClass({
 
     onChange: function(e) {
         if (this.props.onChange)
-            this.props.onChange(e.target.value);
+            this.props.onChange(e, e.target.value);
     },
 
     onKeyDown: function(e){

@@ -7,7 +7,8 @@ var Actions = Reflux.createActions([
 	"removeDownload",
 	"updateSettings",
 	"openFolder",
-	"runFile"
+	"runFile",
+	"clearSearch"
 ]);
 
 var search = Actions.search = Reflux.createAction({ children: ["completed", "failed"] });
@@ -15,10 +16,26 @@ var search = Actions.search = Reflux.createAction({ children: ["completed", "fai
 search.listen(function(query) {
     Api.searchMusic(query)
 		.then(function(results){
-			search.completed("Music", results);
+			search.completed(query, "Music", results);
 		})
 	    .catch(function(error){
-	    	search.failed("Music", error);
+	    	search.failed(query, "Music", error);
+	    });
+
+    Api.searchVideos(query)
+		.then(function(results){
+			search.completed(query, "Videos", results);
+		})
+	    .catch(function(error){
+	    	search.failed(query, "Videos", error);
+	    });
+
+    Api.searchGames(query)
+		.then(function(results){
+			search.completed(query, "Games", results);
+		})
+	    .catch(function(error){
+	    	search.failed(query, "Games", error);
 	    });
 });
 
