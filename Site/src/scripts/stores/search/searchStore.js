@@ -41,12 +41,14 @@ var SearchStore = Reflux.createStore({
 
 	onSearch: function(newQuery) {
 		newQuery = sanitize(newQuery);
-		this.searchData.query = newQuery;
-		_.forEach(this.searchData.results, function(r) {
-			r.searching(newQuery);
-		});
-		this.update();
-		search(newQuery);
+		if (this.searchData.query !== newQuery) {
+			this.searchData.query = newQuery;
+			_.forEach(this.searchData.results, function(r) {
+				r.searching(newQuery);
+			});
+			this.update();
+			search(newQuery);
+		}
 	},
 
 	onSearchCompleted: function(query, category, results) {

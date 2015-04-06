@@ -38,7 +38,7 @@ var SearchBox = React.createClass({
         e.target.value = "";
         e.preventDefault();
         if (this.props.onQueryCleared)
-				this.props.onQueryCleared();
+			this.props.onQueryCleared();
     },
 
     onKeyDown: function(e) {

@@ -8,6 +8,7 @@ var SearchBox = require("./searchBox.js");
 var SearchResultList = require("./searchResultList.js");
 var _ = require("lodash");
 var Actions = require("actions.js");
+var Config = require("config.js");
 
 var SearchView = React.createClass({
     
@@ -15,13 +16,13 @@ var SearchView = React.createClass({
 
     statics: {
         willTransitionTo: function (transition, params) {
-            if (params.query)
+            if (params.query) 
                 Actions.search(params.query);
         }
     },
 
     onQueryChanged: function(newQuery) {
-        Actions.search(newQuery)
+        ReactRouter.HashLocation.replace("/search/" + newQuery);
     },
 
     onQueryCleared: function() {
@@ -36,7 +37,10 @@ var SearchView = React.createClass({
         return (
         	<div>
 	            <h2>Search</h2>
-	            <SearchBox query={this.state.searchData.query} onQueryChanged={this.onQueryChanged} onQueryCleared={this.onQueryCleared} />
+	            <SearchBox query={this.state.searchData.query} 
+                    onQueryChanged={this.onQueryChanged} 
+                    onQueryCleared={this.onQueryCleared} 
+                    debounce={Config.searchDebounce} />
                 <div className="searchResults">
 	               {resultLists}
                 </div>
