@@ -2,12 +2,11 @@
 var Api = {
 	searchMusic: function(query, page, pageSize) {
 		page = page || 1;
-		pageSize = pageSize || 20;
+		pageSize = pageSize || 10;
 		return new Promise(function(resolve, reject){
 			if (query && query.trim().length > 0) {
-
 				setTimeout(function() {
-					resolve(["First song " + query, "Second song " + query, "Third song " + query, "Fourth song " + query]);
+					resolve(getResults("Song", query, pageSize));
 				}, 2000);
 			}
 			else
@@ -17,12 +16,11 @@ var Api = {
 
 	searchVideos: function(query, page, pageSize) {
 		page = page || 1;
-		pageSize = pageSize || 20;
+		pageSize = pageSize || 10;
 		return new Promise(function(resolve, reject){
 			if (query && query.trim().length > 0) {
-
 				setTimeout(function() {
-					resolve(["First video " + query, "Second video " + query, "Third video " + query, "Fourth video " + query]);
+					resolve(getResults("Video", query, pageSize));
 				}, 2300);
 			}
 			else
@@ -32,12 +30,11 @@ var Api = {
 
 	searchGames: function(query, page, pageSize) {
 		page = page || 1;
-		pageSize = pageSize || 20;
+		pageSize = pageSize || 10;
 		return new Promise(function(resolve, reject){
 			if (query && query.trim().length > 0) {
-
 				setTimeout(function() {
-					resolve(["First game " + query, "Second game " + query, "Third game " + query, "Fourth game " + query]);
+					resolve(getResults("Game", query, pageSize));
 				}, 1500);
 			}
 			else
@@ -45,5 +42,13 @@ var Api = {
 		});
 	}
 };
+
+function getResults(type, query, pageSize) {
+	var results = [];
+	for (var i = 0; i < pageSize; i++)
+		results.push(type + " " + query + " " + "#" + i);
+
+	return results;
+}
 
 module.exports = Api;

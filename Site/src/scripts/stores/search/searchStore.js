@@ -3,10 +3,36 @@ var Reflux = require("reflux");
 var Actions = require("actions.js");
 var SearchResults = require("./searchResults.js");
 var Actions = require("actions.js");
+var Api = require("api.js");
+var Config = require("config.js");
 
 function sanitize(newQuery) {
 	if (newQuery)
 		return newQuery.trim();
+}
+
+function search(query) {
+	var page = 1;
+	var pageSize = Config.pageSize;
+	var searches = {
+		"Music": Api.searchMusic,
+		"Videos": Api.searchVideos,
+		"Games": Api.searchGames
+	};
+
+	for (var category in searches) {
+		callSearchApi(category);
+	}
+
+	function callSearchApi(category) {
+		searches[category](query, page, pageSize)
+		.then(function(results){
+			Actions.search.completed(query, category, results);
+		})
+	    .catch(function(error){
+	    	Actions.search.failed(query, category, error);
+	    });
+	}
 }
 
 var SearchStore = Reflux.createStore({
@@ -20,6 +46,7 @@ var SearchStore = Reflux.createStore({
 			r.searching(newQuery);
 		});
 		this.update();
+		search(newQuery);
 	},
 
 	onSearchCompleted: function(query, category, results) {

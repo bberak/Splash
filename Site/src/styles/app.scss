@@ -11,3 +11,10 @@ body {
 .selected {
 	font-weight: bold;
 }
+
+.searchResults {
+	display: flex;
+	flex-direction: row;
+	display: -webkit-flex;
+    -webkit-flex-direction: row;
+}

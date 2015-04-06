@@ -13,6 +13,13 @@ var SearchView = React.createClass({
     
 	mixins: [Reflux.connect(SearchStore, "searchData")],
 
+    statics: {
+        willTransitionTo: function (transition, params) {
+            if (params.query)
+                Actions.search(params.query);
+        }
+    },
+
     onQueryChanged: function(newQuery) {
         Actions.search(newQuery)
     },
@@ -22,16 +29,17 @@ var SearchView = React.createClass({
     },
 
     render: function() {
-
         var resultLists = _.map(this.state.searchData.results, function(r) {
-            return <SearchResultList category={r.category} key={r.category} status={r.status} items={r.items} />;
+            return <SearchResultList category={r.category} key={r.category} status={r.status} items={r.items} page={r.page} />;
         });
 
         return (
         	<div>
 	            <h2>Search</h2>
 	            <SearchBox query={this.state.searchData.query} onQueryChanged={this.onQueryChanged} onQueryCleared={this.onQueryCleared} />
-	            {resultLists}
+                <div className="searchResults">
+	               {resultLists}
+                </div>
             </div>
         );
     }

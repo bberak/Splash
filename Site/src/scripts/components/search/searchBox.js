@@ -15,7 +15,6 @@ var SearchBox = React.createClass({
 	},
 
 	onChange: function (e, value) {
-
 		if (!value && this.props.onQueryCleared) {
 			this.props.onQueryCleared();
 			return;
@@ -37,6 +36,7 @@ var SearchBox = React.createClass({
 
 	onEscape: function (e) {
         e.target.value = "";
+        e.preventDefault();
         if (this.props.onQueryCleared)
 				this.props.onQueryCleared();
     },

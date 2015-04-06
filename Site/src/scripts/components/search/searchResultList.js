@@ -2,7 +2,8 @@
 
 var React = require("react");
 var _ = require("lodash");
-var SearchResultItem = require("./searchResultItem.js")
+var SearchResultItem = require("./searchResultItem.js");
+var Infinite = require('react-infinite');
 
 var SearchResultList = React.createClass({
 
@@ -13,6 +14,10 @@ var SearchResultList = React.createClass({
 			items: []
 		};
 	},
+
+    loadNextResults: function() {
+        alert("Loading: " + this.props.category);
+    },
 
     render: function() {
         if (this.props.status !== "Searching")  {
@@ -29,9 +34,9 @@ var SearchResultList = React.createClass({
         	<div>
         		<h3>{this.props.category}</h3>
                 <span>{this.props.status}</span>
-            	<ul>
-            		{searchResultItems}
-            	</ul>
+            	<Infinite elementHeight={18} containerHeight={250} infiniteLoadBeginBottomOffset={50} onInfiniteLoad={this.loadNextResults} >	
+                    {searchResultItems}
+                </Infinite>
             </div>
         );
     }
