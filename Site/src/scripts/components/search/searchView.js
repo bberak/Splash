@@ -26,13 +26,25 @@ var SearchView = React.createClass({
     },
 
     onQueryCleared: function() {
+        ReactRouter.HashLocation.replace("/search/");
         Actions.clearSearch();
+    },
+
+    onPageResults: function(query, category, nextPage) {
+        Actions.pageSearchResults(query, category, nextPage);
     },
 
     render: function() {
         var resultLists = _.map(this.state.searchData.results, function(r) {
-            return <SearchResultList category={r.category} key={r.category} status={r.status} items={r.items} page={r.page} />;
-        });
+            return <SearchResultList category={r.category} 
+                    key={r.category} 
+                    status={r.status} 
+                    items={r.items} 
+                    page={r.page}
+                    endOfList={r.endOfList}
+                    onPageList={this.onPageResults}
+                    query={this.state.searchData.query} />;
+        }.bind(this));
 
         return (
         	<div>

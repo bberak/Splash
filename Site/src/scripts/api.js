@@ -6,7 +6,7 @@ var Api = {
 		return new Promise(function(resolve, reject){
 			if (query && query.trim().length > 0) {
 				setTimeout(function() {
-					resolve(getResults("Song", query, pageSize));
+					resolve(getResults("Song", query, page, pageSize));
 				}, 2000);
 			}
 			else
@@ -20,7 +20,7 @@ var Api = {
 		return new Promise(function(resolve, reject){
 			if (query && query.trim().length > 0) {
 				setTimeout(function() {
-					resolve(getResults("Video", query, pageSize));
+					resolve(getResults("Video", query, page, pageSize));
 				}, 2300);
 			}
 			else
@@ -34,7 +34,7 @@ var Api = {
 		return new Promise(function(resolve, reject){
 			if (query && query.trim().length > 0) {
 				setTimeout(function() {
-					resolve(getResults("Game", query, pageSize));
+					resolve(getResults("Game", query, page, pageSize));
 				}, 1500);
 			}
 			else
@@ -43,10 +43,13 @@ var Api = {
 	}
 };
 
-function getResults(type, query, pageSize) {
+function getResults(type, query, page, pageSize) {
 	var results = [];
 	for (var i = 0; i < pageSize; i++)
-		results.push(type + " " + query + " " + "#" + i);
+		results.push({ 
+			name: type + "-" + query,
+			url: "http://" + type + "-" + query + "/" + page + "/" + i
+		});
 
 	return results;
 }
