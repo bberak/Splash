@@ -42,10 +42,10 @@ var SearchResultList = React.createClass({
             return <div>No results</div>;
 
         var searchResultItems = _.map(this.props.items, function(i) {
-            return <SearchResultItem name={i.name} key={i.url} />;
+            return <SearchResultItem key={i.url} url={i.url} name={i.name} description={i.description} bytes={i.bytes} seeds={i.seeds} />;
         });
 
-        var list = (<Infinite elementHeight={18} 
+        var list = (<Infinite elementHeight={127} 
                     containerHeight={250} 
                     infiniteLoadBeginBottomOffset={100} 
                     isInfiniteLoading={this.props.status === SearchStatus.PAGING }>    

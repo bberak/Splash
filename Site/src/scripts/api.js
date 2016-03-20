@@ -48,6 +48,9 @@ function getResults(type, query, page, pageSize) {
 	for (var i = 0; i < pageSize; i++)
 		results.push({ 
 			name: type + "-" + query,
+			description: "This is a fake description of a torrent that can be theoretically downloaded",
+			bytes: 200400,
+			seeds: 85,
 			url: "http://" + type + "-" + query + "/" + page + "/" + i
 		});
 

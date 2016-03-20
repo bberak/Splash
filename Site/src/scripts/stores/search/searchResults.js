@@ -1,9 +1,12 @@
 var _ = require("lodash");
 var SearchStatus = require("constants.js").searchStatus;
 
-var SearchItem = function(name, url) {
-	this.name = name;
-	this.url = url;
+var SearchItem = function(result) {
+	this.name = result.name;
+    this.description = result.description;
+    this.bytes = result.bytes;
+    this.seeds = result.seeds;
+	this.url = result.url;
 };
 
 var SearchResults = function(category, pageSize) {
@@ -27,7 +30,7 @@ var SearchResults = function(category, pageSize) {
     this.searchCompleted = function(query, results) {
     	if (this.query === query) {
 	    	this.items = _.map(results, function(r) {
-	    		return new SearchItem(r.name, r.url);
+	    		return new SearchItem(r);
 	    	});
 	    	this.page = 1;
 	    	this.status = SearchStatus.NONE;
@@ -61,7 +64,7 @@ var SearchResults = function(category, pageSize) {
         var expectedPage = this.page + 1;
         if (this.query === query && expectedPage === page) {
             var newItems = _.map(results, function(r) {
-                return new SearchItem(r.name, r.url);
+                return new SearchItem(r);
             });
             this.items = this.items.concat(newItems);
             this.page = expectedPage;

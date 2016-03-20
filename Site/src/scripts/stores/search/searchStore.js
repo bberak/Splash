@@ -11,7 +11,7 @@ function sanitize(newQuery) {
 		return newQuery.trim();
 }
 
-var searches = {
+var searchCategories = {
 	"Music": Api.searchMusic,
 	"Videos": Api.searchVideos,
 	"Games": Api.searchGames
@@ -21,12 +21,12 @@ function search(query) {
 	var page = 1;
 	var pageSize = Config.pageSize;
 
-	for (var category in searches) {
+	for (var category in searchCategories) {
 		callSearchApi(category);
 	}
 
 	function callSearchApi(category) {
-		searches[category](query, page, pageSize)
+		searchCategories[category](query, page, pageSize)
 		.then(function(results){
 			Actions.search.completed(query, category, results);
 		})
@@ -39,7 +39,7 @@ function search(query) {
 function fetchNextPage(query, category, nextPage) {
 	var pageSize = Config.pageSize;
 
-	searches[category](query, nextPage, pageSize)
+	searchCategories[category](query, nextPage, pageSize)
 	.then(function(results){
 		Actions.pageSearchResults.completed(query, category, results, nextPage);
 	})
